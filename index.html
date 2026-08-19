@@ -143,7 +143,7 @@ footer a{color:var(--text-3)}
   transition:border-color .12s,background .12s}
 .tool:active{background:var(--bg-2);border-color:var(--brand)}
 .tool .tn{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;
-  display:flex;align-items:baseline;gap:8px}
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;text-wrap:balance}
 .tool .tn em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--text-3);flex:none}
 .tool .td{font-size:14.5px;color:var(--text-2);margin-bottom:8px}
@@ -182,7 +182,7 @@ h1,.bandname,.qtext{text-wrap:balance}
 .big,.prog,.step{font-variant-numeric:tabular-nums}
 
 /* Long words and pasted content must never widen the page. */
-.item b,.item span,.blocker,.rung .t,.qtext,.tn{overflow-wrap:anywhere}
+.item b,.item span,.blocker,.rung .t,.qtext{overflow-wrap:anywhere}
 
 /* Validation message sits with the field, not hidden behind a dead button. */
 .fielderr{font-size:13.5px;color:var(--brand-deep);margin:-6px 0 16px}
@@ -211,11 +211,14 @@ h1,.bandname,.qtext{text-wrap:balance}
     <p class="lede">Three tools. Each one takes under five minutes, needs nothing you have to look up,
       and gives you one number, or one gap, in your own business.</p>
 
-    <a class="tool" href="/business-level-test">
-      <div class="tn">The Business Level Test <em>12 questions</em></div>
-      <div class="td">Six levels, from cash and paper up to numbers that tell you what to do next.
-        Find out which one you're actually on, and what's blocking the one above it.</div>
-      <div class="tg">Start the test &rarr;</div>
+    <!-- The gym audit leads while the gym sprint is the live campaign. Most traffic
+         arrives from gym-targeted episodes and memes. Revisit when a second vertical
+         ships and the page is no longer pointed at one industry. -->
+    <a class="tool" href="/dependency-audit">
+      <div class="tn">The Gym Owner Dependency Audit <em>15 questions &middot; gyms</em></div>
+      <div class="td">How much of the gym exists only in your head — and which gaps cost you most,
+        ranked in the order worth fixing them.</div>
+      <div class="tg">Start the audit &rarr;</div>
     </a>
 
     <a class="tool" href="/cost-of-repeating">
@@ -225,28 +228,14 @@ h1,.bandname,.qtext{text-wrap:balance}
       <div class="tg">Work out the number &rarr;</div>
     </a>
 
-    <a class="tool" href="/dependency-audit">
-      <div class="tn">The Gym Owner Dependency Audit <em>15 questions &middot; gyms</em></div>
-      <div class="td">How much of the gym exists only in your head — and which gaps cost you most,
-        ranked in the order worth fixing them.</div>
-      <div class="tg">Start the audit &rarr;</div>
+    <a class="tool" href="/business-level-test">
+      <div class="tn">The Business Level Test <em>12 questions</em></div>
+      <div class="td">Six levels, from cash and paper up to numbers that tell you what to do next.
+        Find out which one you're actually on, and what's blocking the one above it.</div>
+      <div class="tg">Start the test &rarr;</div>
     </a>
 
     <p class="meta">Nothing is saved. Nothing is sent. No email address, no sign-up.</p>
-
-    <!-- The argument sits under the tools, not above them. On a 360px phone a hero
-         block pushes every link off the first screen, and most arrivals come from a
-         meme already knowing they have a problem. -->
-    <div class="stat"><b>95%</b> of Kenyan SMEs take M-Pesa. <b>Under 7%</b> use a computer to run the business.
-      <small>You already went digital. You did it in 2007, with M-Pesa, and it took about a day, because
-      nobody asked you to learn anything. Everything since has asked you to run an office as well as a
-      business. That is the part these tools are about.</small></div>
-
-    <p class="src">The two figures: 95% of Kenyan SMEs accept mobile payments &mdash;
-      <a href="https://techafricanews.com/2026/06/18/mastercard-report-highlights-kenyan-sme-confidence-and-digital-payment-growth/">Mastercard SME Confidence Index 2026</a>.
-      Under 7% of African microenterprises use a smartphone or computer for business &mdash;
-      <a href="https://www.ifc.org/en/insights-reports/2023/digital-technologies-in-africa">IFC / World Bank 2023</a>,
-      3,325 microenterprises across seven countries including Kenya.</p>
   </main>
 
   <footer>

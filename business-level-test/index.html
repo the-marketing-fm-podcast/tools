@@ -143,7 +143,7 @@ footer a{color:var(--text-3)}
   transition:border-color .12s,background .12s}
 .tool:active{background:var(--bg-2);border-color:var(--brand)}
 .tool .tn{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;
-  display:flex;align-items:baseline;gap:8px}
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;text-wrap:balance}
 .tool .tn em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--text-3);flex:none}
 .tool .td{font-size:14.5px;color:var(--text-2);margin-bottom:8px}
@@ -182,7 +182,7 @@ h1,.bandname,.qtext{text-wrap:balance}
 .big,.prog,.step{font-variant-numeric:tabular-nums}
 
 /* Long words and pasted content must never widen the page. */
-.item b,.item span,.blocker,.rung .t,.qtext,.tn{overflow-wrap:anywhere}
+.item b,.item span,.blocker,.rung .t,.qtext{overflow-wrap:anywhere}
 
 /* Validation message sits with the field, not hidden behind a dead button. */
 .fielderr{font-size:13.5px;color:var(--brand-deep);margin:-6px 0 16px}
