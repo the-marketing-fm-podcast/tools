@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Free tools for Kenyan business owners — Marketing FM</title>
+<meta name="description" content="Free tools that tell you where your business actually stands. No sign-up, nothing saved, under five minutes each.">
+<meta name="robots" content="index,follow">
+<style>
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --radius-md:8px; --radius-lg:12px;
+  --canvas:#f6f6f4; --bg:#ffffff; --bg-2:#f1f1ef;
+  --text:#1a1a1a; --text-2:#565656; --text-3:#888a8d;
+  --border:#e2e2df; --border-2:#ededea;
+  --brand:#D85A30; --brand-soft:#F5C4B3; --brand-wash:#FAECE7; --brand-deep:#712B13;
+  --ok-bg:#e6f4ed; --ok-text:#15875a;
+  --warn-bg:#fbf1e0; --warn-text:#b45309;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --canvas:#161618; --bg:#1f1f22; --bg-2:#2a2a2e;
+  --text:#f2f2f2; --text-2:#b9b9b9; --text-3:#8c8c8c;
+  --border:#3a3a3f; --border-2:#2f2f33;
+  --brand:#F0997B; --brand-soft:#712B13; --brand-wash:#2a1a14; --brand-deep:#FAECE7;
+  --ok-bg:#15281f; --ok-text:#4ade80;
+  --warn-bg:#2d2310; --warn-text:#fbbf24;
+}}
+:root[data-theme="dark"]{
+  --canvas:#161618; --bg:#1f1f22; --bg-2:#2a2a2e;
+  --text:#f2f2f2; --text-2:#b9b9b9; --text-3:#8c8c8c;
+  --border:#3a3a3f; --border-2:#2f2f33;
+  --brand:#F0997B; --brand-soft:#712B13; --brand-wash:#2a1a14; --brand-deep:#FAECE7;
+  --ok-bg:#15281f; --ok-text:#4ade80;
+  --warn-bg:#2d2310; --warn-text:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--canvas);color:var(--text);line-height:1.55;
+  -webkit-font-smoothing:antialiased;padding:0 0 env(safe-area-inset-bottom)}
+.wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px}
+.brandbar{display:flex;align-items:center;gap:8px;padding:14px 0 20px;font-size:13px;
+  font-weight:600;letter-spacing:.02em;color:var(--text-2)}
+.brandbar a{color:inherit;text-decoration:none}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex:none}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px}
+h1{font-size:clamp(26px,6.5vw,36px);line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+.lede{color:var(--text-2);font-size:16px;margin-bottom:18px}
+.stat{background:var(--brand-wash);border:1px solid var(--brand-soft);border-radius:var(--radius-md);
+  padding:14px 16px;margin:18px 0;font-size:15px;color:var(--text)}
+.stat b{color:var(--brand-deep);font-weight:700}
+.stat small{display:block;margin-top:6px;font-size:12px;color:var(--text-3);line-height:1.4}
+button{font-family:inherit;font-size:16px;cursor:pointer;border:none;background:none;color:inherit}
+.btn{display:block;width:100%;background:var(--brand);color:#fff;font-weight:600;padding:15px 20px;
+  border-radius:var(--radius-md);text-align:center;transition:opacity .15s;text-decoration:none}
+.btn:active{opacity:.82}
+.btn[disabled]{opacity:.38;cursor:default}
+.btn-ghost{display:block;width:100%;background:transparent;color:var(--text-2);font-weight:500;
+  padding:12px;text-align:center;font-size:14px;text-decoration:none}
+.meta{font-size:12.5px;color:var(--text-3);margin-top:14px;text-align:center}
+.prog{display:flex;gap:4px;margin-bottom:22px}
+.prog i{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .25s}
+.prog i.on{background:var(--brand)}
+.step{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:10px}
+.qtext{font-size:20px;line-height:1.35;letter-spacing:-.01em;margin-bottom:8px}
+.qhelp{font-size:14.5px;color:var(--text-2);margin-bottom:22px}
+.answers{display:flex;flex-direction:column;gap:10px}
+.ans{width:100%;text-align:left;padding:15px 18px;border:1.5px solid var(--border);
+  background:var(--bg);border-radius:var(--radius-md);font-weight:600;font-size:16px;
+  display:flex;align-items:center;gap:12px;transition:border-color .12s,background .12s}
+.ans:active{background:var(--bg-2)}
+.ans .k{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);flex:none;
+  display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--text-3)}
+.ans.yes:active{border-color:var(--ok-text)}
+.ans.no:active{border-color:var(--brand)}
+.back{margin-top:18px}
+
+/* numeric input — calc mode */
+.field{display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);background:var(--bg);
+  border-radius:var(--radius-md);padding:4px 16px;margin-bottom:16px}
+.field:focus-within{border-color:var(--brand)}
+.field .pre{font-size:16px;font-weight:600;color:var(--text-3);flex:none}
+.field input{flex:1;min-width:0;border:none;outline:none;background:transparent;color:var(--text);
+  font-family:inherit;font-size:24px;font-weight:700;padding:12px 0;letter-spacing:-.01em}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.field input[type=number]{-moz-appearance:textfield}
+.field .suf{font-size:14px;color:var(--text-3);flex:none}
+.fieldnote{font-size:13px;color:var(--warn-text);background:var(--warn-bg);border-radius:var(--radius-md);
+  padding:10px 12px;margin:-6px 0 16px;line-height:1.45}
+
+/* levels mode — the ladder */
+.levelbig{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--brand);margin-bottom:6px}
+.ladder{margin:20px 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+.rung{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-2);
+  font-size:14.5px;background:var(--bg)}
+.rung:last-child{border-bottom:none}
+.rung .n{font-weight:700;font-size:12px;width:22px;flex:none;color:var(--text-3);padding-top:2px}
+.rung .t{flex:1}
+.rung .t b{display:block;font-weight:600}
+.rung .t span{color:var(--text-3);font-size:13px}
+.rung.done{background:var(--ok-bg)}
+.rung.done .n,.rung.done .t b{color:var(--ok-text)}
+.rung.here{background:var(--brand-wash);box-shadow:inset 3px 0 0 var(--brand)}
+.rung.here .n,.rung.here .t b{color:var(--brand-deep)}
+.rung .tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 7px;border-radius:99px;background:var(--brand);color:#fff;flex:none;align-self:center}
+
+/* score mode + calc mode — the headline figure */
+.big{font-size:clamp(38px,12vw,60px);line-height:1;letter-spacing:-.035em;font-weight:800;
+  color:var(--brand-deep);margin:2px 0 4px}
+.bigsub{font-size:15.5px;color:var(--text-2);margin-bottom:18px}
+.bandname{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.list{margin:20px 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+.item{padding:12px 14px;border-bottom:1px solid var(--border-2);font-size:14.5px;background:var(--bg)}
+.item:last-child{border-bottom:none}
+.item b{display:block;font-weight:600;margin-bottom:2px}
+.item span{color:var(--text-3);font-size:13px}
+.grouphead{padding:9px 14px;background:var(--bg-2);font-size:11.5px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--border-2)}
+
+.blocker{background:var(--warn-bg);border-radius:var(--radius-md);padding:14px 16px;margin:18px 0;font-size:15px}
+.blocker b{color:var(--warn-text);display:block;font-size:12px;letter-spacing:.05em;
+  text-transform:uppercase;margin-bottom:5px}
+.gap{margin:22px 0}
+.gap h3{font-size:15px;margin-bottom:8px}
+.gap ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.gap li{font-size:14.5px;color:var(--text-2);padding-left:20px;position:relative}
+.gap li::before{content:"\2192";position:absolute;left:0;color:var(--brand);font-weight:700}
+.honest{font-size:13px;color:var(--text-3);line-height:1.5;border-left:2px solid var(--border);
+  padding-left:12px;margin:18px 0}
+footer{text-align:center;font-size:12px;color:var(--text-3);padding:26px 0 8px;line-height:1.6}
+footer a{color:var(--text-3)}
+.src{font-size:11.5px;color:var(--text-3);margin-top:20px;line-height:1.5}
+.src a{color:var(--text-3)}
+@media(min-width:560px){.answers{flex-direction:row}.ans{flex:1}}
+
+/* Toolbox index */
+.tool{display:block;text-decoration:none;color:inherit;background:var(--bg);
+  border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:12px;
+  transition:border-color .12s,background .12s}
+.tool:active{background:var(--bg-2);border-color:var(--brand)}
+.tool .tn{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;
+  display:flex;align-items:baseline;gap:8px}
+.tool .tn em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--text-3);flex:none}
+.tool .td{font-size:14.5px;color:var(--text-2);margin-bottom:8px}
+.tool .tg{font-size:13.5px;color:var(--brand);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar"><span class="dot"></span> <a href="/">MARKETING FM &middot; FREE TOOLS</a></div>
+
+  <div class="card">
+    <h1>Find out where your business actually stands</h1>
+    <p class="lede">Three tools. Each one takes under five minutes, needs nothing you have to look up,
+      and gives you one number, or one gap, in your own business.</p>
+
+    <div class="stat"><b>95%</b> of Kenyan SMEs take M-Pesa. <b>Under 7%</b> use a computer to run the business.
+      <small>You already went digital. You did it in 2007, with M-Pesa, and it took about a day, because
+      nobody asked you to learn anything. Everything since has asked you to run an office as well as a
+      business. That is the part these tools are about.</small></div>
+
+    <a class="tool" href="/business-level-test">
+      <div class="tn">The Business Level Test <em>12 questions</em></div>
+      <div class="td">Six levels, from cash and paper up to numbers that tell you what to do next.
+        Find out which one you're actually on, and what's blocking the one above it.</div>
+      <div class="tg">Start the test &rarr;</div>
+    </a>
+
+    <a class="tool" href="/cost-of-repeating">
+      <div class="tn">The Cost of Repeating Yourself <em>4 questions</em></div>
+      <div class="td">&ldquo;How many times do I have to repeat myself?&rdquo; — answered in shillings.
+        Four numbers you already know, multiplied out into what a year of it costs you.</div>
+      <div class="tg">Work out the number &rarr;</div>
+    </a>
+
+    <a class="tool" href="/dependency-audit">
+      <div class="tn">The Gym Owner Dependency Audit <em>15 questions &middot; gyms</em></div>
+      <div class="td">How much of the gym exists only in your head — and which gaps cost you most,
+        ranked in the order worth fixing them.</div>
+      <div class="tg">Start the audit &rarr;</div>
+    </a>
+
+    <p class="meta">Nothing is saved. Nothing is sent. No email address, no sign-up.</p>
+
+    <p class="src">The two figures above: 95% of Kenyan SMEs accept mobile payments &mdash;
+      <a href="https://techafricanews.com/2026/06/18/mastercard-report-highlights-kenyan-sme-confidence-and-digital-payment-growth/">Mastercard SME Confidence Index 2026</a>.
+      Under 7% of African microenterprises use a smartphone or computer for business &mdash;
+      <a href="https://www.ifc.org/en/insights-reports/2023/digital-technologies-in-africa">IFC / World Bank 2023</a>,
+      3,325 microenterprises across seven countries including Kenya.</p>
+  </div>
+
+  <footer>
+    Marketing FM &middot; free resources &mdash; share them freely<br>
+    <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">themarketingfmpodcast</a>
+  </footer>
+</div>
+</body>
+</html>

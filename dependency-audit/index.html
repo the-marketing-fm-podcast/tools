@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Gym Owner Dependency Audit — Marketing FM</title>
+<meta name="description" content="Fifteen questions. Find out how much of your gym exists only in your head — and which gap costs you most.">
+<meta name="robots" content="index,follow">
+<style>
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --radius-md:8px; --radius-lg:12px;
+  --canvas:#f6f6f4; --bg:#ffffff; --bg-2:#f1f1ef;
+  --text:#1a1a1a; --text-2:#565656; --text-3:#888a8d;
+  --border:#e2e2df; --border-2:#ededea;
+  --brand:#D85A30; --brand-soft:#F5C4B3; --brand-wash:#FAECE7; --brand-deep:#712B13;
+  --ok-bg:#e6f4ed; --ok-text:#15875a;
+  --warn-bg:#fbf1e0; --warn-text:#b45309;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --canvas:#161618; --bg:#1f1f22; --bg-2:#2a2a2e;
+  --text:#f2f2f2; --text-2:#b9b9b9; --text-3:#8c8c8c;
+  --border:#3a3a3f; --border-2:#2f2f33;
+  --brand:#F0997B; --brand-soft:#712B13; --brand-wash:#2a1a14; --brand-deep:#FAECE7;
+  --ok-bg:#15281f; --ok-text:#4ade80;
+  --warn-bg:#2d2310; --warn-text:#fbbf24;
+}}
+:root[data-theme="dark"]{
+  --canvas:#161618; --bg:#1f1f22; --bg-2:#2a2a2e;
+  --text:#f2f2f2; --text-2:#b9b9b9; --text-3:#8c8c8c;
+  --border:#3a3a3f; --border-2:#2f2f33;
+  --brand:#F0997B; --brand-soft:#712B13; --brand-wash:#2a1a14; --brand-deep:#FAECE7;
+  --ok-bg:#15281f; --ok-text:#4ade80;
+  --warn-bg:#2d2310; --warn-text:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--canvas);color:var(--text);line-height:1.55;
+  -webkit-font-smoothing:antialiased;padding:0 0 env(safe-area-inset-bottom)}
+.wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px}
+.brandbar{display:flex;align-items:center;gap:8px;padding:14px 0 20px;font-size:13px;
+  font-weight:600;letter-spacing:.02em;color:var(--text-2)}
+.brandbar a{color:inherit;text-decoration:none}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex:none}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px}
+h1{font-size:clamp(26px,6.5vw,36px);line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+.lede{color:var(--text-2);font-size:16px;margin-bottom:18px}
+.stat{background:var(--brand-wash);border:1px solid var(--brand-soft);border-radius:var(--radius-md);
+  padding:14px 16px;margin:18px 0;font-size:15px;color:var(--text)}
+.stat b{color:var(--brand-deep);font-weight:700}
+.stat small{display:block;margin-top:6px;font-size:12px;color:var(--text-3);line-height:1.4}
+button{font-family:inherit;font-size:16px;cursor:pointer;border:none;background:none;color:inherit}
+.btn{display:block;width:100%;background:var(--brand);color:#fff;font-weight:600;padding:15px 20px;
+  border-radius:var(--radius-md);text-align:center;transition:opacity .15s;text-decoration:none}
+.btn:active{opacity:.82}
+.btn[disabled]{opacity:.38;cursor:default}
+.btn-ghost{display:block;width:100%;background:transparent;color:var(--text-2);font-weight:500;
+  padding:12px;text-align:center;font-size:14px;text-decoration:none}
+.meta{font-size:12.5px;color:var(--text-3);margin-top:14px;text-align:center}
+.prog{display:flex;gap:4px;margin-bottom:22px}
+.prog i{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .25s}
+.prog i.on{background:var(--brand)}
+.step{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:10px}
+.qtext{font-size:20px;line-height:1.35;letter-spacing:-.01em;margin-bottom:8px}
+.qhelp{font-size:14.5px;color:var(--text-2);margin-bottom:22px}
+.answers{display:flex;flex-direction:column;gap:10px}
+.ans{width:100%;text-align:left;padding:15px 18px;border:1.5px solid var(--border);
+  background:var(--bg);border-radius:var(--radius-md);font-weight:600;font-size:16px;
+  display:flex;align-items:center;gap:12px;transition:border-color .12s,background .12s}
+.ans:active{background:var(--bg-2)}
+.ans .k{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);flex:none;
+  display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--text-3)}
+.ans.yes:active{border-color:var(--ok-text)}
+.ans.no:active{border-color:var(--brand)}
+.back{margin-top:18px}
+
+/* numeric input — calc mode */
+.field{display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);background:var(--bg);
+  border-radius:var(--radius-md);padding:4px 16px;margin-bottom:16px}
+.field:focus-within{border-color:var(--brand)}
+.field .pre{font-size:16px;font-weight:600;color:var(--text-3);flex:none}
+.field input{flex:1;min-width:0;border:none;outline:none;background:transparent;color:var(--text);
+  font-family:inherit;font-size:24px;font-weight:700;padding:12px 0;letter-spacing:-.01em}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.field input[type=number]{-moz-appearance:textfield}
+.field .suf{font-size:14px;color:var(--text-3);flex:none}
+.fieldnote{font-size:13px;color:var(--warn-text);background:var(--warn-bg);border-radius:var(--radius-md);
+  padding:10px 12px;margin:-6px 0 16px;line-height:1.45}
+
+/* levels mode — the ladder */
+.levelbig{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--brand);margin-bottom:6px}
+.ladder{margin:20px 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+.rung{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-2);
+  font-size:14.5px;background:var(--bg)}
+.rung:last-child{border-bottom:none}
+.rung .n{font-weight:700;font-size:12px;width:22px;flex:none;color:var(--text-3);padding-top:2px}
+.rung .t{flex:1}
+.rung .t b{display:block;font-weight:600}
+.rung .t span{color:var(--text-3);font-size:13px}
+.rung.done{background:var(--ok-bg)}
+.rung.done .n,.rung.done .t b{color:var(--ok-text)}
+.rung.here{background:var(--brand-wash);box-shadow:inset 3px 0 0 var(--brand)}
+.rung.here .n,.rung.here .t b{color:var(--brand-deep)}
+.rung .tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 7px;border-radius:99px;background:var(--brand);color:#fff;flex:none;align-self:center}
+
+/* score mode + calc mode — the headline figure */
+.big{font-size:clamp(38px,12vw,60px);line-height:1;letter-spacing:-.035em;font-weight:800;
+  color:var(--brand-deep);margin:2px 0 4px}
+.bigsub{font-size:15.5px;color:var(--text-2);margin-bottom:18px}
+.bandname{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.list{margin:20px 0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+.item{padding:12px 14px;border-bottom:1px solid var(--border-2);font-size:14.5px;background:var(--bg)}
+.item:last-child{border-bottom:none}
+.item b{display:block;font-weight:600;margin-bottom:2px}
+.item span{color:var(--text-3);font-size:13px}
+.grouphead{padding:9px 14px;background:var(--bg-2);font-size:11.5px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--border-2)}
+
+.blocker{background:var(--warn-bg);border-radius:var(--radius-md);padding:14px 16px;margin:18px 0;font-size:15px}
+.blocker b{color:var(--warn-text);display:block;font-size:12px;letter-spacing:.05em;
+  text-transform:uppercase;margin-bottom:5px}
+.gap{margin:22px 0}
+.gap h3{font-size:15px;margin-bottom:8px}
+.gap ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.gap li{font-size:14.5px;color:var(--text-2);padding-left:20px;position:relative}
+.gap li::before{content:"\2192";position:absolute;left:0;color:var(--brand);font-weight:700}
+.honest{font-size:13px;color:var(--text-3);line-height:1.5;border-left:2px solid var(--border);
+  padding-left:12px;margin:18px 0}
+footer{text-align:center;font-size:12px;color:var(--text-3);padding:26px 0 8px;line-height:1.6}
+footer a{color:var(--text-3)}
+.src{font-size:11.5px;color:var(--text-3);margin-top:20px;line-height:1.5}
+.src a{color:var(--text-3)}
+@media(min-width:560px){.answers{flex-direction:row}.ans{flex:1}}
+
+/* Toolbox index */
+.tool{display:block;text-decoration:none;color:inherit;background:var(--bg);
+  border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:12px;
+  transition:border-color .12s,background .12s}
+.tool:active{background:var(--bg-2);border-color:var(--brand)}
+.tool .tn{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;
+  display:flex;align-items:baseline;gap:8px}
+.tool .tn em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--text-3);flex:none}
+.tool .td{font-size:14.5px;color:var(--text-2);margin-bottom:8px}
+.tool .tg{font-size:13.5px;color:var(--brand);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar"><span class="dot"></span> <a href="/">MARKETING FM &middot; FREE TOOL</a></div>
+  <div id="app"></div>
+  <footer>
+    Marketing FM &middot; free resource &mdash; share it freely<br>
+    <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">themarketingfmpodcast</a>
+  </footer>
+</div>
+
+<script>
+window.CFG = {
+
+  title: "The Gym Owner Dependency Audit — Marketing FM",
+  desc: "Fifteen questions. Find out how much of your gym exists only in your head — and which gap costs you most.",
+
+  mode: "score",
+  wa: "254704334027",
+
+  yesLabel: "Yes, it's written down",
+  noLabel:  "No, it's in my head",
+
+  intro: {
+    h1: "Is the gym running you?",
+    lede: "Fifteen questions. Under five minutes. You get a score, and the gaps ranked by what they cost you.",
+    stat: "If you get sick, does the gym stop? If a new trainer starts on Monday, do they spend the week " +
+          "interrupting everyone else to find out how things are done?" +
+          "<small>If either answer is yes — you don't own a gym. You own a job with equipment in it.</small>",
+    note: "Answer <b>YES</b> only if a system already exists — written down somewhere a person could find " +
+          "it and follow it without you. Not &ldquo;I'm planning to.&rdquo; Not &ldquo;I usually explain it.&rdquo;",
+    cta: "Start the audit",
+    privacy: "Nothing is saved. Nothing is sent. Nobody sees this but you."
+  },
+
+  questions: [
+    { q:"A new hire could work their first shift from something written, without asking a colleague how anything is done.",
+      h:"Something they could read. Not a person they could ask.",
+      no:"Every new person learns by interrupting the people who are already busy." },
+
+    { q:"There is a written list of what a new staff member must be shown, and in what order, on day one.",
+      h:"The order matters as much as the list.",
+      no:"Two people hired a month apart get two different gyms." },
+
+    { q:"A new member's first visit goes the same way regardless of who is on the desk.",
+      h:"Same welcome, same tour, same sign-up — whoever is working.",
+      no:"Your first impression is a coin toss." },
+
+    { q:"Someone other than you can answer a membership enquiry and close it.",
+      h:"Close it. Not take a number and pass it to you.",
+      no:"Every sale waits for you." },
+
+    { q:"Prices, joining fees, freeze and refund rules are written down, and any staff member quotes them correctly.",
+      h:"Including what happens when someone wants to pause or leave.",
+      no:"Different members are told different things, and you find out later." },
+
+    { q:"There is a written daily open and close routine that staff can follow.",
+      h:"A list they work through, not a habit they picked up.",
+      no:"The gym only opens and closes properly when you're there." },
+
+    { q:"Staff know what to do during slow hours without you telling them.",
+      h:"Cleaning, calls, follow-ups, maintenance — decided in advance.",
+      no:"Slow hours mean everyone waits for instruction." },
+
+    { q:"A trainer can hand over a class at no notice, and the cover trainer knows what to run.",
+      h:"The session plan exists somewhere other than the usual trainer's head.",
+      no:"One person calling in sick cancels a class and costs you members." },
+
+    { q:"There is a written standard for what a good session looks like, so you can tell whether one was delivered.",
+      h:"Something you could hold a session against and say yes or no.",
+      no:"You cannot manage quality you never defined." },
+
+    { q:"Someone other than you can count the till and reconcile M-Pesa daily.",
+      h:"They know the steps and they are allowed to do it.",
+      no:"Cash reconciliation stops when you're absent." },
+
+    { q:"Staff know their specific roles without needing daily instruction from you.",
+      h:"Who does what, written down, not worked out each morning.",
+      no:"You are the manager, the supervisor and the staff all at once." },
+
+    { q:"There is a way for staff to raise problems that does not come directly to you first.",
+      h:"A route, a person, or a place they log it.",
+      no:"Every problem escalates to you immediately." },
+
+    { q:"You have someone you trust to run the gym for at least three days if you're away.",
+      h:"Trust and the instructions to act on it.",
+      no:"The gym shuts if you're sick." },
+
+    { q:"A member complaint has a written route that does not start and end with you.",
+      h:"Who hears it, what they do, and when it comes to you.",
+      no:"Complaints either reach you or vanish — there is no third option." },
+
+    { q:"Any staff member can log a broken machine, and something actually happens as a result.",
+      h:"Logged somewhere, and someone owns the fix.",
+      no:"Faults get mentioned in passing and forgotten until a member leaves over it." }
+  ],
+
+  scoreSub: "things that survive your absence",
+
+  listHead: "Your gaps, in the order they cost you",
+
+  /* Nobody fixes fifteen things at once. Taking on new staff goes first because every
+     new hire pays for it again. Handover is what turns one absence into a bad day. */
+  priority: [
+    { name:"Fix these first", q:[0,1] },
+    { name:"Then handover", q:[5,7,12] },
+    { name:"Then quality and money", q:[8,9] }
+  ],
+  restLabel: "The rest, after those",
+
+  bands: [
+    { min:0, max:4, sell:true,
+      name:"The gym is in your head",
+      verdict:"Almost nothing survives your absence. This isn't a discipline problem and it isn't a staff problem — nothing has been written down, so there is nothing for anyone to follow.",
+      action:"Starting from nothing is the quickest kind to fix, because there is nothing to undo first. Writing up the whole gym takes one day of mine on your floor, and about two weeks before it is in your hands. You prepare nothing and you write nothing." },
+
+    { min:5, max:9, sell:true,
+      name:"Owner-dependent",
+      verdict:"Some things run without you. The parts that don't are the parts that cost you — taking on new staff, covering absences, and holding quality. Every new hire restarts the same conversation.",
+      action:"This is the common score, and the gap is always the same — the things you know how to do but have never written down. That is one day of mine on your floor, and about two weeks before it is in your hands. You prepare nothing and you write nothing." },
+
+    { min:10, max:12, sell:true,
+      name:"Partly systemised",
+      verdict:"The bones are there. What's missing is usually handover — what happens when the usual person isn't in.",
+      action:"You don't need the whole gym written up. You need one system built properly and handed to you already working. That is one system rather than the whole gym — a smaller and cheaper job." },
+
+    { min:13, max:15, sell:false,
+      name:"It runs without you",
+      verdict:"Rare. If this is genuinely your score, the gym survives you being away, and systems are not what is holding you back.",
+      action:"What is holding you back is demand — how many people know you exist and walk through the door. That is a different conversation, and the podcast is a better place to start than a sales call." }
+  ],
+
+  /* Score and first gap, so the message arrives already knowing what to talk about. */
+  message: function(c){
+    return "Hi Karl - I did the Gym Owner Dependency Audit. I scored " + c.yes + " out of " + c.total +
+           (c.firstNo ? '. The first gap: "' + c.firstNo + '"' : ".") +
+           " [DEP-GYM-" + c.yes + "] What would it take to get this out of my head?";
+  },
+
+  cta: function(c){
+    return c.yes >= 10 ? "Ask what it takes to close the gaps"
+                       : "Ask what it takes to get this out of your head";
+  },
+
+  waNote: "Goes straight to Karl on WhatsApp. A real person, not a bot.",
+
+  alt: { href:"https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D",
+         label:"Listen to themarketingfmpodcast" },
+
+  more: { href:"/", label:"See the other free tools" },
+
+  src: "This audit has no benchmarks in it and no statistics. Your score is your own answers, counted. " +
+       "The gaps are ranked by what we judge costs a gym most, starting with taking on new staff, " +
+       "because every new hire pays for that one again. That ranking is a judgement, not a measured finding."
+};
+</script>
+<script>
+/* Marketing FM — tool engine.
+   Three modes: levels | score | calc.
+   The engine owns mechanics. The config owns arithmetic and every word a user reads. */
+(function(){
+"use strict";
+
+var C   = window.CFG;
+var app = document.getElementById("app");
+var i   = 0;
+var ans = [];
+
+/* ---------- helpers ---------- */
+
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+  });
+}
+
+/* Hand-rolled thousands separator — locale-independent, so the number on the
+   screen matches the number in the WhatsApp message on every device. */
+function fmt(n){
+  n = Math.round(n);
+  var s = String(Math.abs(n)), out = "", c = 0, x;
+  for (x = s.length - 1; x >= 0; x--){
+    out = s.charAt(x) + out;
+    if (++c % 3 === 0 && x > 0) out = "," + out;
+  }
+  return (n < 0 ? "-" : "") + out;
+}
+
+function el(html){ app.innerHTML = html; window.scrollTo(0, 0); }
+function on(id, ev, fn){ var n = document.getElementById(id); if (n) n[ev] = fn; }
+
+function items(){ return C.mode === "calc" ? C.inputs : C.questions; }
+
+function prog(){
+  return '<div class="prog">' + items().map(function(_, x){
+    return '<i class="' + (x < i ? "on" : "") + '"></i>';
+  }).join("") + '</div>';
+}
+
+function stepLabel(){
+  return '<div class="step">Question ' + (i + 1) + ' of ' + items().length + '</div>';
+}
+
+function wa(msg){
+  return "https://wa.me/" + C.wa + "?text=" + encodeURIComponent(msg);
+}
+
+/* ---------- start ---------- */
+
+function start(){
+  ans = [];
+  i = 0;
+  el(
+    '<div class="card">' +
+      '<h1>' + C.intro.h1 + '</h1>' +
+      '<p class="lede">' + C.intro.lede + '</p>' +
+      (C.intro.stat ? '<div class="stat">' + C.intro.stat + '</div>' : '') +
+      (C.intro.note ? '<p class="lede" style="font-size:15px">' + C.intro.note + '</p>' : '') +
+      '<button class="btn" id="go">' + C.intro.cta + '</button>' +
+      '<p class="meta">' + C.intro.privacy + '</p>' +
+    '</div>'
+  );
+  on("go", "onclick", function(){ i = 0; step(); });
+}
+
+/* ---------- flow ---------- */
+
+function step(){
+  if (i >= items().length){ result(); return; }
+  if (C.mode === "calc") inputScreen(); else questionScreen();
+}
+
+function back(){ if (i > 0){ i--; step(); } }
+
+function questionScreen(){
+  var q = C.questions[i];
+  el(
+    '<div class="card">' + prog() + stepLabel() +
+      '<p class="qtext">' + q.q + '</p>' +
+      '<p class="qhelp">' + q.h + '</p>' +
+      '<div class="answers">' +
+        '<button class="ans yes" id="y"><span class="k">Y</span> ' + C.yesLabel + '</button>' +
+        '<button class="ans no"  id="n"><span class="k">N</span> ' + C.noLabel  + '</button>' +
+      '</div>' +
+      (i > 0 ? '<button class="btn-ghost back" id="b">&larr; Previous question</button>' : '') +
+    '</div>'
+  );
+  on("y", "onclick", function(){ pick(true);  });
+  on("n", "onclick", function(){ pick(false); });
+  on("b", "onclick", back);
+}
+
+function pick(v){ ans[i] = v; i++; step(); }
+
+function inputScreen(){
+  var f = C.inputs[i];
+  var v = ans[i];
+  el(
+    '<div class="card">' + prog() + stepLabel() +
+      '<p class="qtext">' + f.q + '</p>' +
+      '<p class="qhelp">' + f.h + '</p>' +
+      '<div class="field">' +
+        (f.pre ? '<span class="pre">' + f.pre + '</span>' : '') +
+        '<input id="v" type="number" inputmode="numeric" min="' + (f.min != null ? f.min : 0) +
+          '" step="any" placeholder="' + (f.ph != null ? f.ph : "0") + '"' +
+          (v != null ? ' value="' + esc(v) + '"' : '') + '>' +
+        (f.suf ? '<span class="suf">' + f.suf + '</span>' : '') +
+      '</div>' +
+      '<div id="note"></div>' +
+      '<button class="btn" id="next" disabled>' + (i === C.inputs.length - 1 ? C.calcCta : "Next") + '</button>' +
+      (i > 0 ? '<button class="btn-ghost back" id="b">&larr; Previous question</button>' : '') +
+    '</div>'
+  );
+
+  var input = document.getElementById("v");
+  var next  = document.getElementById("next");
+  var note  = document.getElementById("note");
+
+  function read(){
+    var raw = input.value.trim();
+    if (raw === "") return null;
+    var n = Number(raw);
+    if (!isFinite(n)) return null;
+    if (n < (f.min != null ? f.min : 0)) return null;
+    return n;
+  }
+
+  function check(){
+    var n = read();
+    next.disabled = (n === null);
+    /* Clamp rather than print a nonsense figure. The note says so out loud. */
+    note.innerHTML = (n !== null && f.max != null && n > f.max)
+      ? '<p class="fieldnote">' + f.clampNote + '</p>' : "";
+  }
+
+  input.oninput = check;
+  input.onkeydown = function(e){ if (e.key === "Enter" && !next.disabled) next.click(); };
+  next.onclick = function(){
+    var n = read();
+    if (n === null) return;
+    if (f.max != null && n > f.max) n = f.max;
+    ans[i] = n;
+    i++;
+    step();
+  };
+  on("b", "onclick", back);
+  check();
+  input.focus();
+}
+
+/* ---------- results ---------- */
+
+/* levels: your level is the highest one where every rung below it is fully cleared.
+   A business skips rungs the way a roof skips walls. */
+function cleared(lv){
+  return C.questions.every(function(q, x){ return q.lv !== lv || ans[x] === true; });
+}
+
+function resLevels(){
+  var lvl = 0, L;
+  for (L = 1; L <= 5; L++){ if (cleared(L)) lvl = L; else break; }
+
+  var blocker = null, skipped = 0, x;
+  for (x = 0; x < C.questions.length; x++){
+    if (C.questions[x].lv === lvl + 1 && ans[x] === false && !blocker) blocker = C.questions[x];
+    if (C.questions[x].lv >  lvl + 1 && ans[x] === true) skipped++;
+  }
+
+  var rungs = C.levels.map(function(Lv){
+    var cls = Lv.n < lvl ? "done" : (Lv.n === lvl ? "here" : "");
+    return '<div class="rung ' + cls + '"><span class="n">' + Lv.n + '</span>' +
+           '<span class="t"><b>' + esc(Lv.name) + '</b><span>' + esc(Lv.desc) + '</span></span>' +
+           (Lv.n === lvl ? '<span class="tag">You</span>' : "") + '</div>';
+  }).join("");
+
+  var nextList = (C.next[lvl] || []).map(function(t){ return '<li>' + esc(t) + '</li>'; }).join("");
+  var ctx = { lvl: lvl, blocker: blocker, next: Math.min(lvl + 1, 5) };
+
+  return {
+    body:
+      '<div class="levelbig">Your result</div>' +
+      '<h1 style="margin-bottom:6px">Level ' + lvl + ' &mdash; ' + esc(C.levels[lvl].name) + '</h1>' +
+      '<p class="lede">' + esc(C.verdict[lvl]) + '</p>' +
+      /* Blocker before the ladder: it is the one actionable line, and on a phone the
+         six-rung ladder pushes it below the fold. */
+      (blocker ? '<div class="blocker"><b>The first thing blocking you</b>' + esc(blocker.q) + '</div>' : "") +
+      '<div class="ladder">' + rungs + '</div>' +
+      (skipped ? '<p class="qhelp">' + C.skipNote(skipped) + '</p>' : "") +
+      (nextList ? '<div class="gap"><h3>What Level ' + (lvl + 1) + ' would give you</h3><ul>' + nextList + '</ul></div>' : ""),
+    msg: lvl < 5 ? C.message(ctx) : null,
+    cta: lvl < 5 ? C.cta(ctx) : null,
+    alt: C.alt
+  };
+}
+
+function resScore(){
+  var yes = 0, no = [], x;
+  for (x = 0; x < C.questions.length; x++){
+    if (ans[x] === true) yes++; else no.push(x);
+  }
+
+  var band = C.bands[C.bands.length - 1];
+  for (x = 0; x < C.bands.length; x++){
+    if (yes >= C.bands[x].min && yes <= C.bands[x].max){ band = C.bands[x]; break; }
+  }
+
+  /* Nobody fixes fifteen things. Return the NOs in the order they cost money. */
+  var used = {}, groups = [];
+  C.priority.forEach(function(g){
+    var hits = g.q.filter(function(qi){ return no.indexOf(qi) >= 0; });
+    hits.forEach(function(qi){ used[qi] = 1; });
+    if (hits.length) groups.push({ name: g.name, q: hits });
+  });
+  var rest = no.filter(function(qi){ return !used[qi]; });
+  if (rest.length) groups.push({ name: C.restLabel, q: rest });
+
+  var listHtml = groups.map(function(g){
+    return '<div class="grouphead">' + esc(g.name) + '</div>' +
+      g.q.map(function(qi){
+        return '<div class="item"><b>' + esc(C.questions[qi].q) + '</b>' +
+               '<span>' + esc(C.questions[qi].no) + '</span></div>';
+      }).join("");
+  }).join("");
+
+  var ctx = { yes: yes, total: C.questions.length, band: band,
+              firstNo: no.length ? C.questions[no[0]].q : null };
+
+  return {
+    body:
+      '<div class="levelbig">Your result</div>' +
+      '<div class="big">' + yes + ' / ' + C.questions.length + '</div>' +
+      '<p class="bigsub">' + C.scoreSub + '</p>' +
+      '<div class="bandname">' + esc(band.name) + '</div>' +
+      '<p class="lede">' + esc(band.verdict) + '</p>' +
+      (listHtml ? '<div class="gap"><h3>' + C.listHead + '</h3></div><div class="list">' + listHtml + '</div>' : "") +
+      '<p class="lede" style="margin-top:18px">' + esc(band.action) + '</p>',
+    msg: band.sell ? C.message(ctx) : null,
+    cta: band.sell ? C.cta(ctx) : null,
+    alt: C.alt
+  };
+}
+
+function result(){
+  var R = C.mode === "levels" ? resLevels()
+        : C.mode === "score"  ? resScore()
+        : C.result(ans.slice(), { fmt: fmt, esc: esc });
+
+  el(
+    '<div class="card">' + R.body +
+      (R.msg
+        ? '<a class="btn" href="' + wa(R.msg) + '">' + R.cta + '</a>' +
+          '<p class="meta">' + C.waNote + '</p>'
+        : '<a class="btn" href="' + R.alt.href + '">' + R.alt.label + '</a>') +
+      '<button class="btn-ghost" id="again">Take it again</button>' +
+      (C.more ? '<a class="btn-ghost" href="' + C.more.href + '">' + C.more.label + '</a>' : "") +
+      (C.src ? '<p class="src">' + C.src + '</p>' : "") +
+    '</div>'
+  );
+  on("again", "onclick", start);
+}
+
+/* Exposed only so the boundary-case harness can drive the scoring without clicking. */
+window.__engine = {
+  set: function(a){ ans = a.slice(); i = items().length; },
+  result: function(){
+    return C.mode === "levels" ? resLevels()
+         : C.mode === "score"  ? resScore()
+         : C.result(ans.slice(), { fmt: fmt, esc: esc });
+  },
+  fmt: fmt
+};
+
+start();
+})();
+</script>
+</body>
+</html>
