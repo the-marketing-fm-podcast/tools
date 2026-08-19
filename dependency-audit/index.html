@@ -409,6 +409,38 @@ function wa(msg){
   return "https://wa.me/" + C.wa + "?text=" + encodeURIComponent(msg);
 }
 
+/* ---------- ?ref= ----------
+   Partner attribution. A trainer sends .../dependency-audit?ref=KEVIN and the
+   WhatsApp message arrives tagged [DEP-GYM-6 via KEVIN], so who introduced whom
+   is never a matter of memory. Paying a friend on a disputed introduction is how
+   you lose the friend and the channel.
+
+   The value is URL input, so it is whitelisted to letters, digits, space, hyphen
+   and underscore and capped at 24 characters. It is never written into the page —
+   only into the WhatsApp text, where it is encodeURIComponent'd. */
+var REF = (function(){
+  try {
+    var m = /[?&]ref=([^&#]*)/.exec(window.location.search || "");
+    if (!m) return "";
+    return decodeURIComponent(m[1].replace(/\+/g, " "))
+             .replace(/[^A-Za-z0-9 _-]/g, "").trim().slice(0, 24);
+  } catch (e) { return ""; }
+})();
+
+/* Slot the ref inside the existing tool tag so Karl reads both in one glance. */
+function withRef(msg){
+  if (!REF || !msg) return msg;
+  if (/\[[^\]]+\]/.test(msg)) return msg.replace(/\[([^\]]+)\]/, "[$1 via " + REF + "]");
+  return msg + " [via " + REF + "]";
+}
+
+/* Carry the ref across internal links, so an owner who lands on the Toolbox and
+   picks a different tool is still attributed to whoever sent them. */
+function internal(href){
+  if (!REF || !href || !/^\//.test(href)) return href;
+  return href + (href.indexOf("?") === -1 ? "?" : "&") + "ref=" + encodeURIComponent(REF);
+}
+
 /* ---------- history ----------
    Android's Back gesture is the primary navigation control for this audience.
    Without a history entry per question it exits the tool and destroys every answer.
@@ -657,11 +689,11 @@ function drawResult(){
   el(
     '<div class="card">' + R.body +
       (R.msg
-        ? '<a class="btn" href="' + wa(R.msg) + '">' + R.cta + '</a>' +
+        ? '<a class="btn" href="' + wa(withRef(R.msg)) + '">' + R.cta + '</a>' +
           '<p class="meta">' + C.waNote + '</p>'
-        : '<a class="btn" href="' + R.alt.href + '">' + R.alt.label + '</a>') +
+        : '<a class="btn" href="' + internal(R.alt.href) + '">' + R.alt.label + '</a>') +
       '<button class="btn-ghost" id="again">Take it again</button>' +
-      (C.more ? '<a class="btn-ghost" href="' + C.more.href + '">' + C.more.label + '</a>' : "") +
+      (C.more ? '<a class="btn-ghost" href="' + internal(C.more.href) + '">' + C.more.label + '</a>' : "") +
       (C.src ? '<p class="src">' + C.src + '</p>' : "") +
     '</div>'
   );
@@ -672,8 +704,19 @@ function drawResult(){
 window.__engine = {
   set: function(a){ ans = a.slice(); i = items().length; },
   result: compute,
-  fmt: fmt
+  fmt: fmt,
+  ref: function(){ return REF; },
+  withRef: withRef,
+  internal: internal
 };
+
+/* The brandbar and footer links live in the page chrome, not in #app, so they are
+   never re-rendered. Carry the ref onto them once at load. */
+(function(){
+  if (!REF || !document.querySelectorAll) return;
+  var links = document.querySelectorAll('a[href^="/"]'), x;
+  for (x = 0; x < links.length; x++) links[x].setAttribute("href", internal(links[x].getAttribute("href")));
+})();
 
 start();
 })();

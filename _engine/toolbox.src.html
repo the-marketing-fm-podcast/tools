@@ -53,5 +53,24 @@
     <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">themarketingfmpodcast</a>
   </footer>
 </div>
+
+<script>
+/* Partner attribution. If someone arrives on /?ref=KEVIN, carry the ref onto every
+   tool link so the WhatsApp message that comes out the far end is still tagged
+   "via KEVIN". Whitelisted and capped — this value is URL input and is never
+   written into the page, only onto hrefs. */
+(function(){
+  var m = /[?&]ref=([^&#]*)/.exec(location.search || "");
+  if (!m) return;
+  var ref = decodeURIComponent(m[1].replace(/\+/g, " "))
+              .replace(/[^A-Za-z0-9 _-]/g, "").trim().slice(0, 24);
+  if (!ref) return;
+  var links = document.querySelectorAll('a[href^="/"]'), x, h;
+  for (x = 0; x < links.length; x++){
+    h = links[x].getAttribute("href");
+    links[x].setAttribute("href", h + (h.indexOf("?") === -1 ? "?" : "&") + "ref=" + encodeURIComponent(ref));
+  }
+})();
+</script>
 </body>
 </html>

@@ -6,7 +6,7 @@ const vm = require("vm");
 
 const TOOLS = __dirname;
 
-function load(tool){
+function load(tool, search){
   const nodes = {};
   const mk = () => ({ innerHTML:"", value:"", disabled:false, onclick:null,
                       oninput:null, onkeydown:null, focus(){} });
@@ -17,6 +17,9 @@ function load(tool){
   sandbox.window = sandbox;
   sandbox.window.scrollTo = () => {};
   sandbox.window.addEventListener = () => {};
+  sandbox.location = { search: search || "" };
+  sandbox.window.location = sandbox.location;
+  sandbox.document.querySelectorAll = () => [];
   sandbox.history = { pushState(){}, replaceState(){}, back(){} };
   sandbox.window.history = sandbox.history;
   vm.createContext(sandbox);
@@ -163,6 +166,74 @@ head("Cost of Repeating Yourself — calc mode");
      bodies.every(b => !/average|benchmark|typical business|most SMEs|industry/i.test(b.body)));
   ok("honesty line present on every money result",
      bodies.every(b => /your own estimate, multiplied out/.test(b.body)));
+}
+
+/* ---------------- ?ref= partner attribution ---------------- */
+head("Partner attribution - ?ref=");
+{
+  const nYes = (Q, n) => Q.map((_, x) => x < n);
+
+  // no ref at all
+  let S = load("dependency-audit");
+  let Q = S.window.CFG.questions;
+  S.window.__engine.set(nYes(Q, 6));
+  let r = S.window.__engine.result();
+  ok("no ref -> tag unchanged", r.msg.includes("[DEP-GYM-6]") && !/via/.test(r.msg));
+  ok("no ref -> internal links untouched", S.window.__engine.internal("/") === "/");
+
+  // ref present
+  S = load("dependency-audit", "?ref=KEVIN");
+  Q = S.window.CFG.questions;
+  S.window.__engine.set(nYes(Q, 6));
+  r = S.window.__engine.result();
+  ok("ref -> slotted inside the tag",
+     S.window.__engine.withRef(r.msg).includes("[DEP-GYM-6 via KEVIN]"),
+     S.window.__engine.withRef(r.msg));
+  ok("ref -> only one tag rewritten",
+     (S.window.__engine.withRef(r.msg).match(/via KEVIN/g) || []).length === 1);
+  ok("ref -> internal link carries it", S.window.__engine.internal("/") === "/?ref=KEVIN");
+  ok("ref -> respects an existing query string",
+     S.window.__engine.internal("/x?a=1") === "/x?a=1&ref=KEVIN");
+  ok("ref -> external links untouched",
+     S.window.__engine.internal("https://open.spotify.com/x") === "https://open.spotify.com/x");
+
+  // sanitisation - this value is URL input
+  S = load("dependency-audit", "?ref=%3Cscript%3Ealert(1)%3C%2Fscript%3E");
+  ok("script tag stripped", S.window.__engine.ref() === "scriptalert1script",
+     S.window.__engine.ref());
+  S = load("dependency-audit", "?ref=" + encodeURIComponent("]evil[ x"));
+  ok("brackets stripped so the tag cannot be broken",
+     !/[\[\]]/.test(S.window.__engine.ref()), S.window.__engine.ref());
+  S = load("dependency-audit", "?ref=" + "A".repeat(60));
+  ok("capped at 24 chars", S.window.__engine.ref().length === 24);
+  S = load("dependency-audit", "?ref=JOHN+DOE");
+  ok("plus decodes to a space", S.window.__engine.ref() === "JOHN DOE", S.window.__engine.ref());
+  S = load("dependency-audit", "?ref=%%%");
+  ok("undecodable ref degrades to empty", S.window.__engine.ref() === "");
+  S = load("dependency-audit", "?other=1");
+  ok("unrelated query param ignored", S.window.__engine.ref() === "");
+
+  // works on the other two tools
+  S = load("cost-of-repeating", "?ref=KEVIN");
+  S.window.__engine.set([40, 10, 400000, 60]);
+  r = S.window.__engine.result();
+  ok("calculator tag carries the ref",
+     S.window.__engine.withRef(r.msg).includes("[INT-533K via KEVIN]"));
+  S = load("business-level-test", "?ref=KEVIN");
+  Q = S.window.CFG.questions;
+  S.window.__engine.set(Q.map(q => q.lv <= 2));
+  r = S.window.__engine.result();
+  ok("level test tag carries the ref",
+     S.window.__engine.withRef(r.msg).includes("[BLT-L2 via KEVIN]"));
+
+  // the no-sell paths must not gain a phantom message
+  S = load("dependency-audit", "?ref=KEVIN");
+  Q = S.window.CFG.questions;
+  S.window.__engine.set(nYes(Q, 15));
+  r = S.window.__engine.result();
+  ok("15/15 still does not sell, ref or no ref", r.msg === null);
+  ok("  ...and the podcast fallback stays external, no ref appended",
+     S.window.__engine.internal(r.alt.href) === r.alt.href);
 }
 
 /* ---------------- shared ---------------- */

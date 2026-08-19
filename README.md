@@ -77,8 +77,25 @@ Every result writes its own WhatsApp message ending in a bracketed tag:
 [INT-533K]      Cost of Repeating, KSh 533,000 a year
 ```
 
-The tag says which tool produced the lead and what it found. It goes in the `source_tool` column of
+The tag says which tool produced the lead and what it found. It goes in the `Tool Tag` column of
 `tracking/pipeline.csv`. No cookies, no pixel, no consent banner, nothing to maintain.
+
+### Partner attribution — `?ref=`
+
+Give a partner their own link and their name rides along into the message:
+
+```
+/dependency-audit?ref=KEVIN     →     [DEP-GYM-6 via KEVIN]
+```
+
+Works on every tool, carries across internal links (so an owner who lands on the Toolbox and picks a
+different tool is still attributed), and survives Back/Forward.
+
+**It is never written into the page** — only into the WhatsApp text, where it is
+`encodeURIComponent`'d. The value is URL input, so it is whitelisted to `A-Za-z0-9 _-` and capped at
+24 characters. Brackets are stripped specifically so a `ref` cannot forge or break the tool tag.
+
+This exists because the alternative was paying a friend on a remembered introduction.
 
 ---
 
