@@ -109,7 +109,7 @@ It covers all four Level Test boundaries, every Dependency Audit band edge (0, 4
 the calculator's hand-checked arithmetic, its zero-interruption and zero-revenue branches, the
 KSh 60,000 routing flip, and that no benchmark language has crept into any result. 55 assertions.
 
-Screenshots at both sizes, both themes, every screen — 40 images:
+Screenshots at phone and laptop size, every screen — 40 images:
 
 ```bash
 node shots.js
@@ -121,7 +121,7 @@ file. Writes to `shots/`.
 Before publishing a change, also check on a real phone:
 
 - [ ] The WhatsApp link opens a chat to **254704334027** with the message and tag intact
-- [ ] Result renders at 375px, light and dark
+- [ ] Result renders at 375px
 - [ ] The headline result is above the fold at 640px — budget Androids, not iPhones
 - [ ] **Hardware Back steps to the previous question** rather than leaving the site
 
@@ -143,10 +143,15 @@ The ones that carry real weight for this audience:
   budget Android.
 - **`:focus-visible` rings and `(hover:hover)` states**, so the site is equally usable with a
   keyboard and trackpad on a laptop.
-- **Two `theme-color` metas and `color-scheme: light dark`**, so the Android address bar and the
-  native number spinner match the page in both themes.
-- **The argument sits below the tools on the Toolbox.** A hero block pushes every link off the
-  first screen at 360px, and most arrivals already know they have a problem.
+- **Light theme only**, set with `data-theme="light"` on `<html>` plus `color-scheme: light` and a
+  matching `theme-color` meta, so the Android address bar and the native number spinner follow the
+  page instead of the phone. The full dark palette is still in `engine.css` — drop the attribute to
+  bring it back.
+- **The Toolbox is a menu, not an argument.** It opens straight into the three tools. A hero or a
+  statistics block pushes every link off the first screen at 360px, and most arrivals already know
+  they have a problem — the evidence belongs inside the tools, where they have already clicked in.
+- **The gym audit leads.** It is the live campaign and where the traffic is pointed. Revisit when a
+  second vertical ships and the page is no longer aimed at one industry.
 
 ---
 
