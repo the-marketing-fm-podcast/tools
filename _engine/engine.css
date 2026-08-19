@@ -114,7 +114,7 @@ button{font-family:inherit;font-size:16px;cursor:pointer;border:none;background:
 .blocker b{color:var(--warn-text);display:block;font-size:12px;letter-spacing:.05em;
   text-transform:uppercase;margin-bottom:5px}
 .gap{margin:22px 0}
-.gap h3{font-size:15px;margin-bottom:8px}
+.gap h2{font-size:15px;margin-bottom:8px;font-weight:600}
 .gap ul{list-style:none;display:flex;flex-direction:column;gap:7px}
 .gap li{font-size:14.5px;color:var(--text-2);padding-left:20px;position:relative}
 .gap li::before{content:"\2192";position:absolute;left:0;color:var(--brand);font-weight:700}
@@ -137,3 +137,54 @@ footer a{color:var(--text-3)}
   text-transform:uppercase;color:var(--text-3);flex:none}
 .tool .td{font-size:14.5px;color:var(--text-2);margin-bottom:8px}
 .tool .tg{font-size:13.5px;color:var(--brand);font-weight:600}
+
+/* ── Web Interface Guidelines pass ──────────────────────────────── */
+
+/* Touch: kill the 300ms double-tap delay and the default blue tap flash.
+   Both are very visible on budget Android. */
+html{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+
+/* Landscape notches — bottom inset is on body, sides belong on the container. */
+.wrap{padding-left:max(18px,env(safe-area-inset-left));
+      padding-right:max(18px,env(safe-area-inset-right))}
+
+/* Hover — laptop users had no feedback at all; only :active existed. */
+@media (hover:hover){
+  .btn:hover{opacity:.9}
+  .btn-ghost:hover{color:var(--text)}
+  .ans:hover{background:var(--bg-2);border-color:var(--text-3)}
+  .ans.yes:hover{border-color:var(--ok-text)}
+  .ans.no:hover{border-color:var(--brand)}
+  .tool:hover{border-color:var(--brand);background:var(--bg-2)}
+  .tool:hover .tg{text-decoration:underline}
+  footer a:hover,.src a:hover{color:var(--text-2)}
+}
+
+/* Focus — visible keyboard navigation. :focus-visible so it never shows on tap. */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--radius-md)}
+.ans:focus-visible,.btn:focus-visible,.tool:focus-visible{outline-offset:3px}
+.field:focus-within{border-color:var(--brand);outline:2px solid var(--brand);outline-offset:2px}
+
+/* Typography */
+h1,.bandname,.qtext{text-wrap:balance}
+.lede,.qhelp,.td{text-wrap:pretty}
+.big,.prog,.step{font-variant-numeric:tabular-nums}
+
+/* Long words and pasted content must never widen the page. */
+.item b,.item span,.blocker,.rung .t,.qtext,.tn{overflow-wrap:anywhere}
+
+/* Validation message sits with the field, not hidden behind a dead button. */
+.fielderr{font-size:13.5px;color:var(--brand-deep);margin:-6px 0 16px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
+
+/* On a laptop a short question card stranded at the top of an 800px window reads
+   like a rendering error. margin:auto on the flex child centres it when there is
+   spare room and does nothing when the content is taller than the viewport, so
+   long result pages never clip. */
+@media (min-width:900px){
+  .wrap{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+  .wrap #app{margin-block:auto;width:100%}
+}

@@ -109,11 +109,44 @@ It covers all four Level Test boundaries, every Dependency Audit band edge (0, 4
 the calculator's hand-checked arithmetic, its zero-interruption and zero-revenue branches, the
 KSh 60,000 routing flip, and that no benchmark language has crept into any result. 55 assertions.
 
+Screenshots at both sizes, both themes, every screen — 40 images:
+
+```bash
+node shots.js
+```
+
+Needs `playwright-core` and a cached Chromium; the executable path is pinned at the top of the
+file. Writes to `shots/`.
+
 Before publishing a change, also check on a real phone:
 
 - [ ] The WhatsApp link opens a chat to **254704334027** with the message and tag intact
 - [ ] Result renders at 375px, light and dark
 - [ ] The headline result is above the fold at 640px — budget Androids, not iPhones
+- [ ] **Hardware Back steps to the previous question** rather than leaving the site
+
+---
+
+## Interface rules this site holds to
+
+Checked against the [Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines).
+The ones that carry real weight for this audience:
+
+- **Every screen is a history entry.** Android's Back gesture is the primary navigation control
+  here. Without this, a user eleven questions in who taps Back loses everything. The in-page Back
+  button calls `history.back()` so the two can never disagree.
+- **No autofocus on touch devices.** It throws up the keyboard and pushes the question off screen
+  before it has been read. Desktop only, gated on `(hover:hover) and (pointer:fine)`.
+- **The Next button is never disabled.** A greyed-out button explains nothing; an inline message
+  says exactly what to type.
+- **`touch-action: manipulation`** kills the 300ms double-tap delay, which is very visible on a
+  budget Android.
+- **`:focus-visible` rings and `(hover:hover)` states**, so the site is equally usable with a
+  keyboard and trackpad on a laptop.
+- **Two `theme-color` metas and `color-scheme: light dark`**, so the Android address bar and the
+  native number spinner match the page in both themes.
+- **The argument sits below the tools on the Toolbox.** A hero block pushes every link off the
+  first screen at 360px, and most arrivals already know they have a problem.
 
 ---
 

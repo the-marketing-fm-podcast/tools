@@ -8,6 +8,7 @@ var C   = window.CFG;
 var app = document.getElementById("app");
 var i   = 0;
 var ans = [];
+var restoring = false;   /* true while replaying a browser Back/Forward */
 
 /* ---------- helpers ---------- */
 
@@ -17,8 +18,9 @@ function esc(s){
   });
 }
 
-/* Hand-rolled thousands separator — locale-independent, so the number on the
-   screen matches the number in the WhatsApp message on every device. */
+/* Hand-rolled thousands separator rather than Intl.NumberFormat: the figure on the
+   screen and the figure in the WhatsApp message must match character for character
+   on every device, including ICU-trimmed Android builds. */
 function fmt(n){
   n = Math.round(n);
   var s = String(Math.abs(n)), out = "", c = 0, x;
@@ -48,11 +50,29 @@ function wa(msg){
   return "https://wa.me/" + C.wa + "?text=" + encodeURIComponent(msg);
 }
 
-/* ---------- start ---------- */
+/* ---------- history ----------
+   Android's Back gesture is the primary navigation control for this audience.
+   Without a history entry per question it exits the tool and destroys every answer.
+   Each screen pushes one entry, so Back means "previous question" everywhere — and
+   the in-page Back button calls history.back() too, so the two can never disagree. */
 
-function start(){
-  ans = [];
-  i = 0;
+function mark(state, replace){
+  if (restoring) return;
+  try { history[replace ? "replaceState" : "pushState"](state, ""); } catch (e) {}
+}
+
+window.addEventListener("popstate", function(e){
+  var st = e.state;
+  restoring = true;
+  if (!st || st.s === "intro")  { i = 0; drawIntro(); }
+  else if (st.s === "q")        { i = Math.min(st.i, items().length - 1); draw(); }
+  else if (st.s === "result")   { i = items().length; drawResult(); }
+  restoring = false;
+});
+
+/* ---------- screens ---------- */
+
+function drawIntro(){
   el(
     '<div class="card">' +
       '<h1>' + C.intro.h1 + '</h1>' +
@@ -63,17 +83,30 @@ function start(){
       '<p class="meta">' + C.intro.privacy + '</p>' +
     '</div>'
   );
-  on("go", "onclick", function(){ i = 0; step(); });
+  on("go", "onclick", function(){ i = 0; mark({ s:"q", i:0 }); draw(); });
 }
 
-/* ---------- flow ---------- */
+function start(){
+  ans = [];
+  i = 0;
+  mark({ s:"intro" }, true);
+  drawIntro();
+}
 
-function step(){
-  if (i >= items().length){ result(); return; }
+function draw(){
+  if (i >= items().length){ drawResult(); return; }
   if (C.mode === "calc") inputScreen(); else questionScreen();
 }
 
-function back(){ if (i > 0){ i--; step(); } }
+/* One entry point for moving forward, so every screen change pushes exactly once. */
+function advance(){
+  i++;
+  if (i >= items().length) mark({ s:"result" }); else mark({ s:"q", i:i });
+  draw();
+}
+
+/* In-page Back defers to the browser so the two stay in step. */
+function back(){ history.back(); }
 
 function questionScreen(){
   var q = C.questions[i];
@@ -82,79 +115,90 @@ function questionScreen(){
       '<p class="qtext">' + q.q + '</p>' +
       '<p class="qhelp">' + q.h + '</p>' +
       '<div class="answers">' +
-        '<button class="ans yes" id="y"><span class="k">Y</span> ' + C.yesLabel + '</button>' +
-        '<button class="ans no"  id="n"><span class="k">N</span> ' + C.noLabel  + '</button>' +
+        '<button class="ans yes" id="y"><span class="k" aria-hidden="true">Y</span> ' + C.yesLabel + '</button>' +
+        '<button class="ans no"  id="n"><span class="k" aria-hidden="true">N</span> ' + C.noLabel  + '</button>' +
       '</div>' +
       (i > 0 ? '<button class="btn-ghost back" id="b">&larr; Previous question</button>' : '') +
     '</div>'
   );
-  on("y", "onclick", function(){ pick(true);  });
-  on("n", "onclick", function(){ pick(false); });
+  on("y", "onclick", function(){ ans[i] = true;  advance(); });
+  on("n", "onclick", function(){ ans[i] = false; advance(); });
   on("b", "onclick", back);
 }
-
-function pick(v){ ans[i] = v; i++; step(); }
 
 function inputScreen(){
   var f = C.inputs[i];
   var v = ans[i];
+  var last = (i === C.inputs.length - 1);
+  var min = (f.min != null ? f.min : 0);
+
   el(
     '<div class="card">' + prog() + stepLabel() +
-      '<p class="qtext">' + f.q + '</p>' +
-      '<p class="qhelp">' + f.h + '</p>' +
+      '<label class="qtext" for="v">' + f.q + '</label>' +
+      '<p class="qhelp" id="vh">' + f.h + '</p>' +
       '<div class="field">' +
-        (f.pre ? '<span class="pre">' + f.pre + '</span>' : '') +
-        '<input id="v" type="number" inputmode="numeric" min="' + (f.min != null ? f.min : 0) +
-          '" step="any" placeholder="' + (f.ph != null ? f.ph : "0") + '"' +
+        (f.pre ? '<span class="pre" aria-hidden="true">' + f.pre + '</span>' : '') +
+        '<input id="v" name="' + (f.name || ("answer" + (i + 1))) + '"' +
+          ' type="number" inputmode="numeric" autocomplete="off" spellcheck="false"' +
+          ' enterkeyhint="' + (last ? "go" : "next") + '" aria-describedby="vh"' +
+          ' min="' + min + '" step="any" placeholder="' + (f.ph != null ? f.ph : "0") + '"' +
           (v != null ? ' value="' + esc(v) + '"' : '') + '>' +
         (f.suf ? '<span class="suf">' + f.suf + '</span>' : '') +
       '</div>' +
-      '<div id="note"></div>' +
-      '<button class="btn" id="next" disabled>' + (i === C.inputs.length - 1 ? C.calcCta : "Next") + '</button>' +
+      '<div id="note" aria-live="polite"></div>' +
+      '<button class="btn" id="next">' + (last ? C.calcCta : "Next") + '</button>' +
       (i > 0 ? '<button class="btn-ghost back" id="b">&larr; Previous question</button>' : '') +
     '</div>'
   );
 
   var input = document.getElementById("v");
-  var next  = document.getElementById("next");
   var note  = document.getElementById("note");
 
   function read(){
     var raw = input.value.trim();
     if (raw === "") return null;
     var n = Number(raw);
-    if (!isFinite(n)) return null;
-    if (n < (f.min != null ? f.min : 0)) return null;
+    if (!isFinite(n) || n < min) return null;
     return n;
   }
 
-  function check(){
+  /* Clamp rather than print a nonsense figure, and say so out loud. */
+  function hint(){
     var n = read();
-    next.disabled = (n === null);
-    /* Clamp rather than print a nonsense figure. The note says so out loud. */
     note.innerHTML = (n !== null && f.max != null && n > f.max)
       ? '<p class="fieldnote">' + f.clampNote + '</p>' : "";
   }
 
-  input.oninput = check;
-  input.onkeydown = function(e){ if (e.key === "Enter" && !next.disabled) next.click(); };
-  next.onclick = function(){
+  /* The button stays enabled. A greyed-out button with no explanation tells a tired
+     person nothing; an inline message tells them exactly what to type. */
+  function submit(){
     var n = read();
-    if (n === null) return;
+    if (n === null){
+      note.innerHTML = '<p class="fielderr">' +
+        (f.err || (min > 0 ? "Enter a number above " + (min - 1) + " to continue."
+                           : "Enter a number to continue.")) + '</p>';
+      input.focus();
+      return;
+    }
     if (f.max != null && n > f.max) n = f.max;
     ans[i] = n;
-    i++;
-    step();
-  };
+    advance();
+  }
+
+  input.oninput = hint;
+  input.onkeydown = function(e){ if (e.key === "Enter"){ e.preventDefault(); submit(); } };
+  on("next", "onclick", submit);
   on("b", "onclick", back);
-  check();
-  input.focus();
+  hint();
+
+  /* Autofocus on desktop only. On a phone it throws up the keyboard and pushes the
+     question off screen before it has been read. */
+  if (window.matchMedia && matchMedia("(hover:hover) and (pointer:fine)").matches) input.focus();
 }
 
 /* ---------- results ---------- */
 
-/* levels: your level is the highest one where every rung below it is fully cleared.
-   A business skips rungs the way a roof skips walls. */
+/* levels: your level is the highest one where every rung below it is fully cleared. */
 function cleared(lv){
   return C.questions.every(function(q, x){ return q.lv !== lv || ans[x] === true; });
 }
@@ -189,7 +233,7 @@ function resLevels(){
       (blocker ? '<div class="blocker"><b>The first thing blocking you</b>' + esc(blocker.q) + '</div>' : "") +
       '<div class="ladder">' + rungs + '</div>' +
       (skipped ? '<p class="qhelp">' + C.skipNote(skipped) + '</p>' : "") +
-      (nextList ? '<div class="gap"><h3>What Level ' + (lvl + 1) + ' would give you</h3><ul>' + nextList + '</ul></div>' : ""),
+      (nextList ? '<div class="gap"><h2>What Level ' + (lvl + 1) + ' would give you</h2><ul>' + nextList + '</ul></div>' : ""),
     msg: lvl < 5 ? C.message(ctx) : null,
     cta: lvl < 5 ? C.cta(ctx) : null,
     alt: C.alt
@@ -235,7 +279,7 @@ function resScore(){
       '<p class="bigsub">' + C.scoreSub + '</p>' +
       '<div class="bandname">' + esc(band.name) + '</div>' +
       '<p class="lede">' + esc(band.verdict) + '</p>' +
-      (listHtml ? '<div class="gap"><h3>' + C.listHead + '</h3></div><div class="list">' + listHtml + '</div>' : "") +
+      (listHtml ? '<div class="gap"><h2>' + C.listHead + '</h2></div><div class="list">' + listHtml + '</div>' : "") +
       '<p class="lede" style="margin-top:18px">' + esc(band.action) + '</p>',
     msg: band.sell ? C.message(ctx) : null,
     cta: band.sell ? C.cta(ctx) : null,
@@ -243,11 +287,14 @@ function resScore(){
   };
 }
 
-function result(){
-  var R = C.mode === "levels" ? resLevels()
-        : C.mode === "score"  ? resScore()
-        : C.result(ans.slice(), { fmt: fmt, esc: esc });
+function compute(){
+  return C.mode === "levels" ? resLevels()
+       : C.mode === "score"  ? resScore()
+       : C.result(ans.slice(), { fmt: fmt, esc: esc });
+}
 
+function drawResult(){
+  var R = compute();
   el(
     '<div class="card">' + R.body +
       (R.msg
@@ -259,17 +306,13 @@ function result(){
       (C.src ? '<p class="src">' + C.src + '</p>' : "") +
     '</div>'
   );
-  on("again", "onclick", start);
+  on("again", "onclick", function(){ ans = []; i = 0; mark({ s:"intro" }); drawIntro(); });
 }
 
-/* Exposed only so the boundary-case harness can drive the scoring without clicking. */
+/* Exposed only so the boundary-case harness can drive scoring without clicking. */
 window.__engine = {
   set: function(a){ ans = a.slice(); i = items().length; },
-  result: function(){
-    return C.mode === "levels" ? resLevels()
-         : C.mode === "score"  ? resScore()
-         : C.result(ans.slice(), { fmt: fmt, esc: esc });
-  },
+  result: compute,
   fmt: fmt
 };
 

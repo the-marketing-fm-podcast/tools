@@ -1,19 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="color-scheme:light dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESC}}">
 <meta name="robots" content="index,follow">
+<meta name="theme-color" content="#f6f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161618" media="(prefers-color-scheme: dark)">
 <style>
 {{CSS}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="brandbar"><span class="dot"></span> <a href="/">MARKETING FM &middot; FREE TOOL</a></div>
-  <div id="app"></div>
+  <div class="brandbar"><span class="dot" aria-hidden="true"></span>
+    <a href="/" translate="no">MARKETING FM &middot; FREE TOOL</a></div>
+  <main id="app" aria-live="polite"></main>
   <footer>
     Marketing FM &middot; free resource &mdash; share it freely<br>
     <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">themarketingfmpodcast</a>

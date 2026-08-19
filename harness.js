@@ -16,6 +16,9 @@ function load(tool){
   };
   sandbox.window = sandbox;
   sandbox.window.scrollTo = () => {};
+  sandbox.window.addEventListener = () => {};
+  sandbox.history = { pushState(){}, replaceState(){}, back(){} };
+  sandbox.window.history = sandbox.history;
   vm.createContext(sandbox);
   vm.runInContext(fs.readFileSync(path.join(TOOLS, tool, "config.js"), "utf8"), sandbox);
   vm.runInContext(fs.readFileSync(path.join(TOOLS, "_engine", "engine.js"), "utf8"), sandbox);
