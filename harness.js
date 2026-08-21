@@ -168,6 +168,73 @@ head("Cost of Repeating Yourself — calc mode");
      bodies.every(b => /your own estimate, multiplied out/.test(b.body)));
 }
 
+/* ---------------- Who Stopped Coming ---------------- */
+head("Who Stopped Coming — calc mode, with the I-don't-know path");
+{
+  const S = load("who-stopped-coming");
+  const D = S.window.__engine.DUNNO;
+  const run = v => { S.window.__engine.set(v); return S.window.__engine.result(); };
+
+  ok("engine exposes the DUNNO sentinel as a negative", D === -1);
+
+  // 80 members, KSh 3,000, 12 gone, 0 chased -> 12 * 3000 = 36,000/mo, 15% of the gym
+  let r = run([80, 3000, 12, 0]);
+  ok("typical case -> KSh 36,000 a month", /KSh 36,000/.test(r.body), r.body.match(/KSh [\d,]+/)[0]);
+  ok("  ...share of the gym = 15%", /15% of the gym/.test(r.body));
+  ok("  ...nobody contacted is said plainly", /Not one of them has been contacted/.test(r.body));
+  ok("  ...tag is [GONE-12]", r.msg.includes("[GONE-12]"), r.msg);
+
+  // the I-don't-know path is the point of the tool: it must sell, and never do arithmetic
+  // on the sentinel — a -1 leaking into a figure is the bug this asserts against.
+  r = run([80, 3000, D, 0]);
+  ok("don't know -> the result is that he doesn't know", /You don't know/.test(r.body));
+  ok("  ...still sells", r.msg !== null);
+  ok("  ...tag is [GONE-?]", r.msg.includes("[GONE-?]"), r.msg);
+  ok("  ...no negative number reaches the page", !/-1|-\d/.test(r.body.replace(/&[a-z]+;/g, "")));
+  ok("  ...no negative number reaches the message", !/-1(?![\d])/.test(r.msg.replace(/ - /g, " ")));
+  ok("  ...the membership base is valued, not the gap", /KSh 240,000 a month between them/.test(r.body));
+  // The disclosure has to describe the sum actually shown. On this path the money is
+  // the whole membership, so the "what those members were worth" wording would be a lie.
+  ok("  ...the disclosure describes the whole book, not a loss",
+     /what the book is worth, not what you have lost/.test(r.body) &&
+     !/not what they would have been worth if they stayed/.test(r.body));
+
+  // nobody drifted -> no sale, routed to the audit
+  r = run([80, 3000, 0, 0]);
+  ok("0 gone -> no WhatsApp message", r.msg === null);
+  ok("0 gone -> routes to the audit", r.alt.href === "/dependency-audit");
+  ok("0 gone -> no KSh figure", !/KSh/.test(r.body));
+
+  // already chasing everyone -> deliberately does not sell
+  r = run([80, 3000, 12, 12]);
+  ok("chased all -> does not sell", r.msg === null);
+  r = run([80, 3000, 12, 40]);
+  ok("chased more than are gone -> does not sell", r.msg === null);
+
+  // partially chased -> sells, and the remainder is named
+  r = run([80, 3000, 12, 5]);
+  ok("chased some -> still sells", r.msg !== null);
+  ok("  ...names the 7 nobody has spoken to", /leaves 7 nobody has spoken to/.test(r.body));
+
+  // fee of zero is a real answer: report the count, drop the money
+  r = run([80, 0, 12, 0]);
+  ok("0 fee -> count reported, no KSh", !/KSh/.test(r.body) && /15% of the gym/.test(r.body));
+  ok("0 fee -> still sells on the count", r.msg !== null && r.msg.includes("[GONE-12]"));
+
+  // a typo that says more members left than exist must not produce over 100%
+  r = run([80, 3000, 500, 0]);
+  ok("gone > members is clamped to 100%", /100% of the gym/.test(r.body));
+
+  // The honesty paragraph says "no industry averages on this page", so it is stripped
+  // before the check — otherwise the disclaimer trips the rule it exists to enforce.
+  const bodies = [run([80,3000,12,0]), run([80,3000,D,0]), run([12,500,3,1])];
+  const claims = b => b.body.replace(/<p class="honest">[\s\S]*?<\/p>/g, "");
+  ok("no benchmark/average language in any result",
+     bodies.every(b => !/average|benchmark|typical gym|industry|retention rate/i.test(claims(b))));
+  ok("honesty line present on every result that shows a figure",
+     bodies.every(b => /your own four answers, multiplied out/.test(b.body)));
+}
+
 /* ---------------- ?ref= partner attribution ---------------- */
 head("Partner attribution - ?ref=");
 {
@@ -239,7 +306,7 @@ head("Partner attribution - ?ref=");
 /* ---------------- shared ---------------- */
 head("Shared");
 {
-  for (const t of ["business-level-test", "dependency-audit", "cost-of-repeating"]){
+  for (const t of ["business-level-test", "dependency-audit", "cost-of-repeating", "who-stopped-coming"]){
     const html = fs.readFileSync(path.join(TOOLS, t, "index.html"), "utf8");
     ok(t + ": WhatsApp number set", html.includes("254704334027") && !html.includes("254XXXXXXXXX"));
     ok(t + ": no external requests", !/(src|href)=["']https?:\/\/(?!open\.spotify|www\.ifc|techafricanews|researchictafrica|www\.fsdkenya)/.test(html));

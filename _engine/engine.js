@@ -10,6 +10,11 @@ var i   = 0;
 var ans = [];
 var restoring = false;   /* true while replaying a browser Back/Forward */
 
+/* Recorded when a calc input is answered "I don't know". Negative, so it can never
+   collide with a typed value — every numeric field has min >= 0. A config that offers
+   the option must handle this sentinel explicitly; arithmetic on it is a bug. */
+var DUNNO = -1;
+
 /* ---------- helpers ---------- */
 
 function esc(s){
@@ -179,6 +184,11 @@ function inputScreen(){
       '</div>' +
       '<div id="note" aria-live="polite"></div>' +
       '<button class="btn" id="next">' + (last ? C.calcCta : "Next") + '</button>' +
+      /* "I don't know" is a real answer to some questions and the most valuable one
+         to others — an owner who cannot say how many members stopped coming has just
+         found the thing the tool exists to show him. Only rendered where the config
+         asks for it; recorded as DUNNO so the arithmetic can branch on it. */
+      (f.dunno ? '<button class="btn-ghost" id="dk">' + f.dunno + '</button>' : '') +
       (i > 0 ? '<button class="btn-ghost back" id="b">&larr; Previous question</button>' : '') +
     '</div>'
   );
@@ -220,6 +230,7 @@ function inputScreen(){
   input.oninput = hint;
   input.onkeydown = function(e){ if (e.key === "Enter"){ e.preventDefault(); submit(); } };
   on("next", "onclick", submit);
+  on("dk", "onclick", function(){ ans[i] = DUNNO; advance(); });
   on("b", "onclick", back);
   hint();
 
@@ -346,6 +357,7 @@ window.__engine = {
   set: function(a){ ans = a.slice(); i = items().length; },
   result: compute,
   fmt: fmt,
+  DUNNO: DUNNO,
   ref: function(){ return REF; },
   withRef: withRef,
   internal: internal

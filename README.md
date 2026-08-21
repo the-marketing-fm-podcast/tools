@@ -8,9 +8,28 @@ the owner has to look up, and ends in a WhatsApp message that arrives already kn
 | Path | Tool | Mode | Reveals |
 |---|---|---|---|
 | `/` | The Toolbox | — | Index. This is the link that goes in the bio and on every meme |
+| `/who-stopped-coming` | Who Stopped Coming? | `calc` | How many members have quietly drifted, and what they were worth |
 | `/business-level-test` | The Business Level Test | `levels` | Which of six digitalisation rungs they're on |
 | `/cost-of-repeating` | The Cost of Repeating Yourself | `calc` | What answering the same questions costs, in KSh a year |
 | `/dependency-audit` | The Gym Owner Dependency Audit | `score` | How much of the gym exists only in the owner's head |
+
+### Who Stopped Coming — and why "I don't know" is a button
+
+**This one feeds the front door** ([send me the book](../offer/send-me-the-book.md), L3 Install 1).
+The others reveal a gap; this one reveals money the owner can collect this week from members he
+already has.
+
+Question 3 — *how many haven't been in for 30 days?* — carries an **I don't know** button, and that
+answer is the most valuable result the tool produces:
+
+> An owner who cannot say who has stopped coming has just discovered something **true right now**,
+> about himself, in ninety seconds, for free. Everything else this business argues is a warning about
+> the future, and a warning is dismissable. This isn't.
+
+Mechanically it is `f.dunno` on a `calc` input. The engine records `DUNNO` (`-1`, chosen so it can
+never collide with a typed value — every numeric field has `min >= 0`) and the config **must** branch
+on it explicitly. **Arithmetic on the sentinel is a bug**, and the harness asserts no negative reaches
+either the page or the WhatsApp message.
 
 ---
 
@@ -61,6 +80,10 @@ so each must sit on its own line and end with `",`:
 | `score` | `questions[]` with `no:` text, `bands[]`, `priority[]` | Counts the yeses, picks the band, groups the NOs in priority order |
 | `calc` | `inputs[]`, `result(v, u)` returning `{body, msg, cta, alt}` | Renders one numeric field per screen, validates, clamps at `max`, hands the values to your `result()` |
 
+An input may also set **`dunno: "I don't know"`** to offer that as an answer. The engine records
+`-1` and your `result()` has to handle it as a case, not a number. Use it only where not knowing is
+itself worth reporting back.
+
 Set `sell:false` on a band (or return `msg:null`) when a result should **not** go to a sales
 conversation. The engine then shows `alt` instead of the WhatsApp button. A 15/15 audit score and a
 Level 5 test result both use this — selling to someone the offer can't help costs more than the sale.
@@ -75,7 +98,13 @@ Every result writes its own WhatsApp message ending in a bracketed tag:
 [BLT-L2]        Business Level Test, Level 2
 [DEP-GYM-6]     Dependency Audit, gym, scored 6
 [INT-533K]      Cost of Repeating, KSh 533,000 a year
+[GONE-12]       Who Stopped Coming, 12 members drifted
+[GONE-?]        Who Stopped Coming, and he could not say
 ```
+
+⚡ **`[GONE-?]` is the highest-intent message this business receives.** It means an owner has just
+told you, in writing, that he does not know who has left his gym — and asked what it would take to
+find out. It routes straight to *send me the book*.
 
 The tag says which tool produced the lead and what it found. It goes in the `Tool Tag` column of
 `tracking/pipeline.csv`. No cookies, no pixel, no consent banner, nothing to maintain.
@@ -85,7 +114,9 @@ The tag says which tool produced the lead and what it found. It goes in the `Too
 Give a partner their own link and their name rides along into the message:
 
 ```
+/who-stopped-coming?ref=KEVIN   →     [GONE-? via KEVIN]
 /dependency-audit?ref=KEVIN     →     [DEP-GYM-6 via KEVIN]
+/?ref=KEVIN                     →     carries onto whichever tool he picks
 ```
 
 Works on every tool, carries across internal links (so an owner who lands on the Toolbox and picks a
@@ -124,7 +155,8 @@ node harness.js
 
 It covers all four Level Test boundaries, every Dependency Audit band edge (0, 4/5, 9/10, 12/13, 15),
 the calculator's hand-checked arithmetic, its zero-interruption and zero-revenue branches, the
-KSh 60,000 routing flip, and that no benchmark language has crept into any result. 55 assertions.
+KSh 60,000 routing flip, every branch of Who Stopped Coming including the `DUNNO` path and its
+sentinel leakage guards, and that no benchmark language has crept into any result. **100 assertions.**
 
 Screenshots at phone and laptop size, every screen — 40 images:
 
@@ -164,11 +196,12 @@ The ones that carry real weight for this audience:
   matching `theme-color` meta, so the Android address bar and the native number spinner follow the
   page instead of the phone. The full dark palette is still in `engine.css` — drop the attribute to
   bring it back.
-- **The Toolbox is a menu, not an argument.** It opens straight into the three tools. A hero or a
+- **The Toolbox is a menu, not an argument.** It opens straight into the four tools. A hero or a
   statistics block pushes every link off the first screen at 360px, and most arrivals already know
   they have a problem — the evidence belongs inside the tools, where they have already clicked in.
-- **The gym audit leads.** It is the live campaign and where the traffic is pointed. Revisit when a
-  second vertical ships and the page is no longer aimed at one industry.
+- **Who Stopped Coming leads**, because it is the only tool whose result is money collectable this
+  week, and because its best outcome is the owner discovering he cannot answer it. The gym audit
+  follows. Revisit when a second vertical ships and the page is no longer aimed at one industry.
 
 ---
 
