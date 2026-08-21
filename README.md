@@ -139,6 +139,19 @@ Output is committed. There is no build step on Vercel — no framework, no insta
 Each page is one file with **zero external requests**, so it also works offline and can be sent to
 someone as a file on WhatsApp.
 
+### Deploying
+
+**One remote, one push.** `git push` to `the-marketing-fm-podcast/tools` on `main` and Vercel builds
+it. Since the committed `index.html` files *are* the site, **a push with a stale build in it ships a
+stale site** — always run `pwsh _engine/build.ps1` before committing, and `node harness.js` before
+pushing.
+
+> ✅ **Consolidated 21 Aug 2026.** Vercel used to deploy a hand-kept mirror at `mfmp112-karl/tools`,
+> so every change needed two pushes and the live site silently stalled whenever one was forgotten.
+> The two repos never shared a history, which meant **no push between them could ever fast-forward**
+> — and the obvious escape, `--force`, quietly destroys one side's history. One remote removes the
+> whole class of problem.
+
 Edit `config.js` or anything in `_engine/`, then rebuild. Never hand-edit a generated `index.html`
 you intend to keep — the next build overwrites it.
 
