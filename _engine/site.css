@@ -1,0 +1,194 @@
+/* ── Site layer ──────────────────────────────────────────────────────────────
+   Loaded by the portfolio, the Toolbox index and the case studies. NOT by the
+   four tools: a question card is a product surface and stays on engine.css alone.
+
+   Everything here is additive. engine.css owns the tokens and the colour identity;
+   this file adds the serif display register, the wider container, the committed
+   terracotta fields and the chart primitives.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root{
+  /* Georgia first, deliberately. Drawn for screen legibility rather than fashion,
+     reads institutional rather than styled, and needs no download — a web font is
+     an external request, and these pages load on Kenyan mobile data. */
+  --font-serif:Georgia,ui-serif,"Times New Roman",serif;
+  --font-mono:ui-monospace,"Cascadia Code",Consolas,"Courier New",monospace;
+  --measure:34rem;          /* ~65ch of prose */
+  --site-max:78rem;
+  --gut:clamp(18px,5vw,56px);
+}
+
+/* ── Shell ─────────────────────────────────────────────────────────────────── */
+
+.site{max-width:var(--site-max);margin:0 auto;padding:0 var(--gut)}
+.site-wide{max-width:none;padding:0}
+
+/* Vertical rhythm is varied on purpose: generous between arguments, tight inside
+   a group. A single uniform section pad is what makes a page read as a template. */
+section{padding-block:clamp(48px,9vw,104px)}
+section.tight{padding-block:clamp(32px,5vw,56px)}
+
+.prose{max-width:var(--measure)}
+.prose p + p{margin-top:.9em}
+
+/* ── Type ──────────────────────────────────────────────────────────────────── */
+
+.d1,.d2,.d3{font-family:var(--font-serif);font-weight:400;letter-spacing:-.015em;
+  line-height:1.08;text-wrap:balance}
+.d1{font-size:clamp(2.35rem,7.4vw,5.1rem)}
+.d2{font-size:clamp(1.85rem,4.6vw,3.15rem);line-height:1.12}
+.d3{font-size:clamp(1.3rem,2.6vw,1.85rem);line-height:1.2}
+
+.lead{font-size:clamp(1.05rem,1.9vw,1.3rem);line-height:1.5;color:var(--text-2);
+  text-wrap:pretty}
+.say{font-family:var(--font-serif);font-size:clamp(1.25rem,3.1vw,2rem);line-height:1.3;
+  letter-spacing:-.01em;text-wrap:balance}
+
+/* Figures are countable things, so they get the mono. Nothing else does — mono as
+   a general "technical" costume is a tell. */
+.fig{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em;font-weight:600}
+
+.kicker{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-3)}
+
+a.u{color:var(--brand);text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb,var(--brand) 35%,transparent);
+  padding-bottom:1px}
+@media(hover:hover){a.u:hover{border-bottom-color:var(--brand)}}
+
+/* ── The terracotta field ──────────────────────────────────────────────────── */
+/* Committed, not accented: the colour owns the surface where the argument is made. */
+
+.field-brand{background:var(--brand-deep);color:#fdf3ef}
+.field-brand .d1,.field-brand .d2,.field-brand .say{color:#fff}
+.field-brand .lead{color:#f0cdc0}
+.field-brand .kicker{color:#e0a894}
+.field-brand a.u{color:#fff;border-bottom-color:rgba(255,255,255,.45)}
+@media(hover:hover){.field-brand a.u:hover{border-bottom-color:#fff}}
+
+.field-wash{background:var(--brand-wash)}
+.rule{border:0;border-top:1px solid var(--border);margin:0}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-block:18px;flex-wrap:wrap}
+.top .mark{display:flex;align-items:center;gap:9px;font-weight:700;font-size:.95rem;
+  letter-spacing:.01em;color:var(--text);text-decoration:none}
+.top nav{display:flex;gap:clamp(12px,2.4vw,26px);font-size:.9rem}
+.top nav a{color:var(--text-2);text-decoration:none}
+@media(hover:hover){.top nav a:hover{color:var(--brand)}}
+
+/* ── Work ──────────────────────────────────────────────────────────────────── */
+/* Deliberately not a uniform card grid. Each study is a full band with its own
+   chart; the rhythm comes from the data, not from repeated boxes. */
+
+.study{display:grid;gap:clamp(22px,4vw,54px);align-items:start;
+  grid-template-columns:1fr;padding-block:clamp(34px,5.5vw,62px);
+  border-top:1px solid var(--border)}
+@media(min-width:56rem){
+  .study{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+  .study.flip > .study-viz{order:-1}
+}
+.study-body{max-width:var(--measure)}
+.study h3{font-family:var(--font-serif);font-weight:400;
+  font-size:clamp(1.45rem,3.2vw,2.15rem);line-height:1.15;letter-spacing:-.015em;
+  margin:.35em 0 .5em;text-wrap:balance}
+.study p{color:var(--text-2);font-size:1rem}
+.study dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+  gap:14px 18px;margin:20px 0 0;border-top:1px solid var(--border-2);padding-top:16px}
+.study dt{font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:3px}
+.study dd{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
+  font-size:1.18rem;font-weight:600;letter-spacing:-.02em}
+
+/* ── Charts ────────────────────────────────────────────────────────────────── */
+/* Inline SVG, no library, no external request. Every figure drawn here also appears
+   in the source document — a chart may never introduce a number the work does not
+   contain. */
+
+.viz{width:100%;height:auto;display:block;overflow:visible}
+.viz text{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.viz .lab{font-size:11px;fill:var(--text-3);letter-spacing:.02em}
+.viz .val{font-size:13px;fill:var(--text);font-weight:600}
+.viz .bar{fill:var(--brand)}
+.viz .bar-mute{fill:var(--border)}
+.viz .axis{stroke:var(--border);stroke-width:1}
+.viz .dash{stroke:var(--text-3);stroke-width:1;stroke-dasharray:3 3}
+.viz .line{fill:none;stroke:var(--brand);stroke-width:2.5;
+  stroke-linejoin:round;stroke-linecap:round}
+.viz .line-2{fill:none;stroke:var(--text-3);stroke-width:1.5;stroke-dasharray:4 3}
+.viz-note{font-size:.82rem;color:var(--text-3);margin-top:10px;line-height:1.5;
+  max-width:42ch}
+
+/* ── The offer ─────────────────────────────────────────────────────────────── */
+
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
+.price .n{font-family:var(--font-mono);font-size:clamp(2.2rem,5.4vw,3.4rem);
+  font-weight:700;letter-spacing:-.035em;line-height:1}
+.price .per{font-size:.95rem;color:var(--text-3)}
+
+.steps{counter-reset:s;display:grid;gap:2px;margin-top:26px}
+.steps li{counter-increment:s;list-style:none;display:grid;
+  grid-template-columns:2.1rem 1fr;gap:14px;padding:15px 0;
+  border-top:1px solid var(--border-2);align-items:baseline}
+.steps li::before{content:counter(s);font-family:var(--font-mono);font-size:.82rem;
+  font-weight:700;color:var(--brand)}
+.steps b{display:block;font-weight:600;margin-bottom:2px}
+.steps span{color:var(--text-2);font-size:.95rem}
+
+/* ── Actions ───────────────────────────────────────────────────────────────── */
+
+.cta{display:inline-flex;align-items:center;gap:9px;background:var(--brand);color:#fff;
+  font-weight:600;font-size:1rem;padding:15px 26px;border-radius:var(--radius-md);
+  text-decoration:none;transition:opacity .15s}
+.cta:active{opacity:.85}
+@media(hover:hover){.cta:hover{opacity:.9}}
+.field-brand .cta{background:#fff;color:var(--brand-deep)}
+.cta-2{display:inline-flex;align-items:center;gap:8px;color:var(--text-2);
+  font-size:.95rem;text-decoration:none;padding:15px 4px}
+.cta-2 .ar{color:var(--brand)}
+@media(hover:hover){.cta-2:hover{color:var(--text)}}
+.field-brand .cta-2{color:#f0cdc0}
+.field-brand .cta-2 .ar{color:#fff}
+
+.acts{display:flex;align-items:center;gap:clamp(10px,3vw,28px);flex-wrap:wrap;
+  margin-top:30px}
+
+/* ── Tool links on the site pages ──────────────────────────────────────────── */
+
+.toolrow{display:grid;gap:0;margin-top:8px}
+.toolrow a{display:grid;grid-template-columns:1fr auto;gap:8px 18px;align-items:center;
+  padding:17px 0;border-top:1px solid var(--border);text-decoration:none;color:inherit}
+.toolrow a:last-child{border-bottom:1px solid var(--border)}
+.toolrow .tt{font-weight:600;font-size:1.02rem}
+.toolrow .ts{color:var(--text-3);font-size:.88rem;margin-top:2px}
+.toolrow .go{color:var(--brand);font-size:.88rem;font-weight:600;white-space:nowrap}
+@media(hover:hover){.toolrow a:hover .tt{color:var(--brand)}
+  .toolrow a:hover .go{text-decoration:underline}}
+
+/* ── Caveats ───────────────────────────────────────────────────────────────── */
+/* Proof discipline means most claims travel with one of these. */
+
+.note{border-left:2px solid var(--border);padding-left:14px;color:var(--text-3);
+  font-size:.88rem;line-height:1.55;max-width:46ch}
+.note b{color:var(--text-2);font-weight:600}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+
+.foot{border-top:1px solid var(--border);padding-block:34px 44px;
+  display:flex;gap:18px 40px;flex-wrap:wrap;justify-content:space-between;
+  font-size:.88rem;color:var(--text-3)}
+.foot a{color:var(--text-3)}
+@media(hover:hover){.foot a:hover{color:var(--brand)}}
+
+/* Entrance: one page-load reveal on the hero only, never per section. Content is
+   visible by default and the transition enhances it — a reveal gated on a class
+   that never fires ships a blank page. */
+@media(prefers-reduced-motion:no-preference){
+  .rise{animation:rise .62s cubic-bezier(.22,1,.36,1) both}
+  .rise-2{animation-delay:.09s}
+  .rise-3{animation-delay:.17s}
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
