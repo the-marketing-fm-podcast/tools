@@ -4,3 +4,8 @@ Thumbs.db
 shots/
 node_modules/
 package-lock.json
+
+# Design tooling, installed not vendored. The impeccable skill is a third-party
+# Apache-2.0 package (~100 files) and this repo is served statically by Vercel —
+# committing it would publish it. Install it into .claude/skills/ locally.
+.claude/skills/

@@ -45,14 +45,45 @@ Get-ChildItem $root -Directory |
     $built++
   }
 
-# The Toolbox index is a static page, not an engine tool, but it shares the
-# stylesheet — so it is built here too rather than carrying a second copy of the CSS.
-$toolboxSrc = Join-Path $PSScriptRoot "toolbox.src.html"
-if (Test-Path $toolboxSrc) {
-  $tb = (Get-Content $toolboxSrc -Raw).Replace('{{CSS}}', $css.TrimEnd())
-  [System.IO.File]::WriteAllText((Join-Path $root "index.html"), $tb, $utf8NoBom)
-  Write-Host ("  built  {0,-22} {1}" -f "index.html", "the Toolbox")
-  $built++
+# Site pages — the portfolio at /, the Toolbox at /tools, the case studies under /work.
+# These are static pages rather than engine tools, but they share the stylesheet, so
+# they are built here rather than carrying a second copy of the CSS.
+#
+# site.css is the site layer: serif display, the wider container, the committed
+# terracotta and the chart primitives. Tool pages never load it — a question card is a
+# product surface and stays on engine.css alone.
+#
+# Naming convention decides the output path, so adding a page means adding one file:
+#   index.src.html            -> /index.html
+#   tools.src.html            -> /tools/index.html
+#   work-rugsbysensei.src.html -> /work/rugsbysensei/index.html
+$siteDir = Join-Path $PSScriptRoot "site"
+$siteCss = ""
+$siteCssPath = Join-Path $PSScriptRoot "site.css"
+if (Test-Path $siteCssPath) { $siteCss = (Get-Content $siteCssPath -Raw).TrimEnd() }
+
+if (Test-Path $siteDir) {
+  Get-ChildItem $siteDir -Filter "*.src.html" | Sort-Object Name | ForEach-Object {
+    $name = $_.Name -replace '\.src\.html$', ''
+
+    if ($name -eq "index") {
+      $outFile = Join-Path $root "index.html"
+    } else {
+      # first hyphen becomes a directory separator: work-zelha -> work/zelha
+      $rel = $name -replace '^([^-]+)-', '$1/'
+      $outDir = Join-Path $root ($rel -replace '/', [IO.Path]::DirectorySeparatorChar)
+      if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
+      $outFile = Join-Path $outDir "index.html"
+    }
+
+    $page = (Get-Content $_.FullName -Raw).
+      Replace('{{CSS}}',     $css.TrimEnd()).
+      Replace('{{SITECSS}}', $siteCss)
+
+    [System.IO.File]::WriteAllText($outFile, $page, $utf8NoBom)
+    Write-Host ("  built  {0,-22} {1}" -f $name, $outFile.Substring($root.Length + 1))
+    $built++
+  }
 }
 
 Write-Host ""

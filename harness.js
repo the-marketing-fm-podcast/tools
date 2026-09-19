@@ -310,7 +310,7 @@ head("Shared");
     const html = fs.readFileSync(path.join(TOOLS, t, "index.html"), "utf8");
     ok(t + ": WhatsApp number set", html.includes("254704334027") && !html.includes("254XXXXXXXXX"));
     ok(t + ": no external requests", !/(src|href)=["']https?:\/\/(?!open\.spotify|www\.ifc|techafricanews|researchictafrica|www\.fsdkenya)/.test(html));
-    ok(t + ": links back to the Toolbox", html.includes('href="/"'));
+    ok(t + ": links back to the Toolbox", html.includes('href="/tools"'));
     ok(t + ": self-contained (no <link> or external <script src>)",
        !/<link[^>]+stylesheet/i.test(html) && !/<script[^>]+src=/i.test(html));
   }
@@ -320,6 +320,43 @@ head("Shared");
   ok("fmt: 1000 -> 1,000",     f(1000) === "1,000");
   ok("fmt: 999 -> 999",        f(999) === "999");
   ok("fmt: 1234567 -> 1,234,567", f(1234567) === "1,234,567");
+}
+
+/* ---------------- site pages ---------------- */
+/* The portfolio at /, the Toolbox at /tools. These are static pages, so the checks
+   are on the built HTML: the routes the four live tools depend on, the one ask, and
+   the constraints that keep these pages loadable on mobile data. */
+head("Site");
+{
+  const page = (rel) => fs.readFileSync(path.join(TOOLS, rel, "index.html"), "utf8");
+
+  const home = page(".");
+  ok("home: is the portfolio, not the Toolbox", /Views don&rsquo;t become members/.test(home));
+  ok("home: carries the one ask", home.includes("wa.me/254704334027"));
+  ok("home: offers the fallback (a free tool)", home.includes('href="/tools"'));
+  ok("home: no external requests",
+     !/(src|href)=["']https?:\/\/(?!open\.spotify|wa\.me)/.test(home));
+  ok("home: self-contained (no <link> or external <script src>)",
+     !/<link[^>]+stylesheet/i.test(home) && !/<script[^>]+src=/i.test(home));
+  ok("home: every chart has an accessible name",
+     (home.match(/<svg/g) || []).length === (home.match(/<svg[^>]+aria-label=/g) || []).length);
+  ok("home: charts are declared as images",
+     (home.match(/<svg/g) || []).length === (home.match(/<svg[^>]+role="img"/g) || []).length);
+
+  // Proof discipline: the page may not imply a delivered result it does not have.
+  ok("home: still says there is no delivered gym campaign",
+     /No delivered gym campaign yet/.test(home));
+  // Never-publish list: Zelha proves a document was produced, never revenue.
+  ok("home: carries no Zelha revenue figure", !/KSh\s*2,?500/.test(home));
+
+  const tb = page("tools");
+  ok("toolbox: moved to /tools and is still a menu",
+     /Find out where your business actually stands/.test(tb));
+  ok("toolbox: links to all four tools",
+     ["who-stopped-coming","dependency-audit","cost-of-repeating","business-level-test"]
+       .every(t => tb.includes('href="/' + t + '"')));
+  ok("toolbox: offers a way back to the portfolio", /href="\/"/.test(tb));
+  ok("toolbox: keeps the nothing-saved promise", /Nothing is saved/.test(tb));
 }
 
 console.log("\n" + passes + " passed, " + fails + " failed");
