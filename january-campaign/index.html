@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-theme="light" style="color-scheme:light">
+<html lang="en" data-theme="paper" style="color-scheme:light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Free tools for Kenyan business owners — Marketing FM</title>
-<meta name="description" content="Free tools that tell you where your business actually stands. No sign-up, nothing saved, under five minutes each.">
+<title>The January Campaign — Marketing FM</title>
+<meta name="description" content="A six-week campaign for the one date the whole gym calendar depends on. Sold October and November only. KSh 25,000. Five members named at the desk, or the next campaign is free.">
 <meta name="robots" content="index,follow">
-<meta name="theme-color" content="#f6f6f4">
+<meta name="theme-color" content="#faf8f4">
 <style>
 /* ---------------- Typewriter fonts (site-wide) ----------------
    Seven typewriter faces, all self-hosted; loaded on every page so tool pages
@@ -440,85 +440,6 @@ body.paper::after {
   }
 }
 
-/* ---------------- Yellow hero — the elevator pitch band ----------------
-   Full-width, yellow highlighter background — documentary-newspaper style.
-   In B&W mode the yellow drops to a warm gray so the "black and white"
-   promise holds. */
-
-.hero-yellow {
-  background: var(--hero-bg, #f7d64a);
-  border-top: 3px solid var(--ink);
-  border-bottom: 3px solid var(--ink);
-  padding: clamp(28px, 5vw, 44px) 0;
-  margin: 14px 0 30px;
-  position: relative;
-  z-index: 2;
-}
-.hero-yellow .kicker {
-  font-family: var(--font-body);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin: 0 0 10px;
-  opacity: 0.85;
-}
-.hero-yellow .pitch {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 5.6vw, 46px);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin: 0 0 16px;
-  text-wrap: balance;
-  max-width: 26ch;
-}
-.hero-yellow .pitch .mark {
-  /* Highlighter inside the highlighter: a second, deeper yellow underline
-     that sits under the bottom half of the word, like a marker stroke on
-     a page that is already yellow. */
-  background: linear-gradient(180deg, transparent 55%, var(--hero-mark, #ffb84a) 55%, var(--hero-mark, #ffb84a) 92%, transparent 92%);
-  padding: 0 4px;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-.hero-yellow .lead {
-  font-family: var(--font-body);
-  font-size: clamp(16px, 2vw, 18px);
-  color: var(--ink);
-  margin: 0 0 20px;
-  max-width: 62ch;
-  line-height: 1.55;
-}
-.hero-yellow .lead strong {
-  font-weight: 400;
-  border-bottom: 2px solid var(--ink);
-}
-.hero-yellow .actions {
-  margin-top: 12px;
-}
-/* Black-ink CTAs, tuned to read on yellow. */
-.cta-ink {
-  background: var(--ink);
-  color: var(--hero-bg, #f7d64a);
-  border-color: var(--ink);
-}
-@media (hover: hover) {
-  .cta-ink:hover { background: #000; color: #fff; border-color: #000; }
-}
-.cta-ink-ghost {
-  background: transparent;
-  color: var(--ink);
-  border-color: var(--ink);
-}
-@media (hover: hover) {
-  .cta-ink-ghost:hover { background: var(--ink); color: var(--hero-bg, #f7d64a); }
-}
-
-/* Colourway overrides for the hero: yellow in colour mode, warm gray in B&W. */
-:root[data-theme="paper"] { --hero-bg: #f7d64a; --hero-mark: #ffb84a; }
-:root[data-theme="paper-bw"] { --hero-bg: #e6e2d8; --hero-mark: #cfc9bd; }
-
 /* ---------------- Banner (free teardown) ---------------- */
 
 .banner {
@@ -911,96 +832,120 @@ body.paper::after {
 }
 </style>
 </head>
-<body>
+<body class="paper">
+
 <div class="wrap">
-  <div class="brandbar"><span class="dot" aria-hidden="true"></span>
-    <a href="/" translate="no">MARKETING FM</a> &middot; FREE TOOLS</div>
-
-  <main class="card">
-    <h1>Find out where your business actually stands</h1>
-    <p class="lede">Four diagnostic tools, plus one open-source workout tracker. Each one takes
-      under five minutes to try, needs nothing you have to look up, and gives you one number, one
-      gap, or one artefact you can hand a member the same day.</p>
-
-    <!-- "Who stopped coming?" leads because it is the one tool whose result is money
-         the owner can collect this week, from members he already has — and because
-         "I don't know" is a valid answer to it, which is the finding most owners
-         arrive at. The gym audit follows while the gym sprint is the live campaign.
-         Revisit when a second vertical ships and the page is no longer pointed at
-         one industry. -->
-    <a class="tool" href="/who-stopped-coming">
-      <div class="tn">Who Stopped Coming? <em>4 questions &middot; gyms</em></div>
-      <div class="td">Members don't announce that they've left. They just stop showing up, and the
-        first sign is a quiet month. Find out how many of yours have gone &mdash; and what that
-        was worth.</div>
-      <div class="tg">Work out the number &rarr;</div>
-    </a>
-
-    <a class="tool" href="/dependency-audit">
-      <div class="tn">The Gym Owner Dependency Audit <em>15 questions &middot; gyms</em></div>
-      <div class="td">When a gym runs on memory, a sick day is a crisis and a new hire is a month
-        of interruptions. You get a score out of 15, and the gaps in the order worth fixing.</div>
-      <div class="tg">Score your gym &mdash; 5 minutes &rarr;</div>
-    </a>
-
-    <a class="tool" href="/cost-of-repeating">
-      <div class="tn">The Cost of Repeating Yourself <em>4 questions</em></div>
-      <div class="td">&ldquo;How many times do I have to repeat myself?&rdquo; — answered in shillings.
-        Four numbers you already know, multiplied out into what a year of it costs you.</div>
-      <div class="tg">Work out the number &rarr;</div>
-    </a>
-
-    <a class="tool" href="/business-level-test">
-      <div class="tn">The Business Level Test <em>12 questions</em></div>
-      <div class="td">Six levels, from cash and paper up to numbers that tell you what to do next.
-        Find out which one you're actually on, and what's blocking the one above it.</div>
-      <div class="tg">Start the test &rarr;</div>
-    </a>
-
-    <!-- openGym — not a Marketing FM build, so it is honestly labelled as external.
-         It appears here because it earns a place: it exports a printed programme
-         from any routine, and a printed programme is what the audit and the
-         4-month fill both point at when the question is what an annual member
-         gets that a monthly one doesn't. -->
-    <a class="tool" href="https://opengym.duarte-santos.ch" target="_blank" rel="noopener noreferrer">
-      <div class="tn">openGym <em>external &middot; AGPL-3.0 &middot; not built by us</em></div>
-      <div class="td">A free open-source workout tracker. The one feature that matters for a gym:
-        every routine exports as a clean printed PDF. That is what turns "your annual member gets a
-        programme" from a promise into something you can hand across the front desk.</div>
-      <div class="tg">Open openGym &rarr;</div>
-    </a>
-    <p class="meta" style="margin-top:-10px">Configured, branded instances are the paid add-on inside
-      <a href="/the-4-month-fill" style="color:var(--brand);font-weight:600;text-decoration:none">The 4-Month Fill</a>
-      — but the tool itself is free to open right now.</p>
-
-    <p class="meta">The four tools above save nothing and send nothing. openGym is a third-party site
-      with its own privacy story — read theirs before signing in.</p>
-    <p class="meta" style="margin-top:10px"><a href="/" style="color:var(--brand);font-weight:600;text-decoration:none">&larr; What Marketing FM does for gyms</a></p>
-  </main>
-
-  <footer>
-    Marketing FM &middot; free resources &mdash; share them freely<br>
-    <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">themarketingfmpodcast</a>
-  </footer>
+  <header class="masthead">
+    <h1 class="nameplate"><a href="/">MARKETING FM</a></h1>
+    <p class="slug"><span>Nairobi</span><span>The January Campaign</span></p>
+  </header>
+  <nav class="top" aria-label="Sections">
+    <a href="/">Home</a>
+    <a href="/audit">The Priced Teardown</a>
+    <a href="/january-campaign" aria-current="page">January Campaign</a>
+    <a href="/the-4-month-fill">The 4-Month Fill</a>
+    <a href="/tools">Free Tools</a>
+  </nav>
 </div>
 
+<main class="story">
+
+  <p class="kicker">L3 · October &amp; November only</p>
+  <h1>The January Campaign</h1>
+  <p class="deck">A six-week campaign for the one date the whole Kenyan gym calendar depends on. Sold in Q4 for a January launch — then again the following year.</p>
+
+  <p class="price-huge">KSh 25,000<small>fixed. Seasonal — commissioning window Oct–Nov.</small></p>
+
+  <div class="actions">
+    <a class="cta" href="https://wa.me/254704334027?text=Hi%20Karl%20%E2%80%94%20I%20want%20the%20January%20Campaign.%20When%20do%20we%20start%3F%20%5BJAN%5D">Book the January slot</a>
+    <a class="cta-ghost" href="/audit">Try the audit first</a>
+  </div>
+
+  <h2>Why this exists as its own thing</h2>
+  <p>Everything sold as a monthly membership in January expires in March. A gym that knows that sells terms in January. A gym that doesn't calls March a bad month. That is why a January campaign has to be commissioned in November — and why the deadline renews honestly, every year.</p>
+
+  <h2>What we build together</h2>
+  <ul>
+    <li>One thing your members can actually say yes to from a phone — small enough to buy without a call.</li>
+    <li>Thirty days of content built to sell it: five pillars on a five-day cycle, every day ending at the same offer.</li>
+    <li>A trained front desk running the sales script when the campaign goes live.</li>
+    <li>A count of everyone who names the offer — the number that makes the guarantee enforceable.</li>
+  </ul>
+
+  <h2>How it runs</h2>
+  <ol>
+    <li>Find the strength — your numbers plus short review calls with your own members from my script.</li>
+    <li>Build the offer — one simple, named, dated challenge built on that strength.</li>
+    <li>Test it on current members first — one week, before a single post is made. If they will not buy it, we fix it before thirty days of content are built on top of it.</li>
+    <li>Thirty days of content — five pillars on a five-day cycle. Every day has an angle and every angle ends at the same offer.</li>
+    <li>Brief the desk — sales scripts, and your existing staff trained to use them, so what the content brings does not leak at the last step.</li>
+    <li>Read the numbers back — anyone who walks in has to name the offer. For the first time, the posting has a countable end.</li>
+  </ol>
+
+  <h2>The guarantee</h2>
+  <blockquote>If this campaign does not bring you five new subscribers in six weeks — the number where it has paid for itself at your own published price — I build the next one free.</blockquote>
+  <p>The number to target is fifty. The number I guarantee is five. Guaranteeing the target is how one fee buys two campaigns. Guaranteeing break-even is how you know I mean it.</p>
+
+  <h2>What we ask of you</h2>
+  <ul>
+    <li>Post at least twenty-four of the thirty planned posts.</li>
+    <li>The offer live at the desk and in the bio by day one.</li>
+    <li>Your trained staff run the script on enquiries.</li>
+    <li>Log everyone who names the offer.</li>
+  </ul>
+  <p>The last one is the most important sentence on this page. Without a count, the guarantee is unenforceable and the case study is mush.</p>
+
+  <h2>Branches</h2>
+  <p>25,000 covers one brand. Additional branches: 10,000 each. Not volume pricing. Each branch needs its own localised offer, its own desk brief and its own count. Their trained staff can run it — what the fee buys is the branch being measurable.</p>
+
+  <p class="margin-note">This is the seasonal middle tier. Most of the year the ladder is two: <a href="/audit">the audit</a> and <a href="/the-4-month-fill">the four-month fill</a>. This one shows up in October, sells for two months, delivers into January, and disappears again.</p>
+
+  <div class="actions">
+    <a class="cta" href="https://wa.me/254704334027?text=Hi%20Karl%20%E2%80%94%20I%20want%20the%20January%20Campaign.%20When%20do%20we%20start%3F%20%5BJAN%5D">Book the January slot</a>
+    <a class="cta-ghost" href="/">Back to front page</a>
+  </div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="row">
+      <a href="https://wa.me/254704334027">WhatsApp 0704 334 027</a> · <a href="/tools">Free tools</a> · <a href="https://open.spotify.com/show/6OxIsPRTPPKkE11UBAo21D">The podcast</a>
+    </div>
+    <div class="row">Marketing FM · Juja, Kenya</div>
+    <div class="row"><a href="#" id="theme-toggle">Read in black and white</a></div>
+  </div>
+</footer>
+
 <script>
-/* Partner attribution. If someone arrives on /?ref=KEVIN, carry the ref onto every
-   tool link so the WhatsApp message that comes out the far end is still tagged
-   "via KEVIN". Whitelisted and capped — this value is URL input and is never
-   written into the page, only onto hrefs. */
 (function(){
-  var m = /[?&]ref=([^&#]*)/.exec(location.search || "");
-  if (!m) return;
-  var ref = decodeURIComponent(m[1].replace(/\+/g, " "))
-              .replace(/[^A-Za-z0-9 _-]/g, "").trim().slice(0, 24);
-  if (!ref) return;
-  var links = document.querySelectorAll('a[href^="/"]'), x, h;
-  for (x = 0; x < links.length; x++){
-    h = links[x].getAttribute("href");
-    links[x].setAttribute("href", h + (h.indexOf("?") === -1 ? "?" : "&") + "ref=" + encodeURIComponent(ref));
-  }
+  try {
+    var qs = new URLSearchParams(location.search);
+    var q = qs.get('theme');
+    var saved = null;
+    try { saved = localStorage.getItem('mfm-theme'); } catch (e) {}
+    var t = (q === 'bw') ? 'paper-bw' : (q === 'colour' || q === 'color') ? 'paper' : (saved || 'paper');
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('mfm-theme', t); } catch (e) {}
+    var toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      var render = function(){
+        var cur = document.documentElement.getAttribute('data-theme') || 'paper';
+        toggle.textContent = cur === 'paper-bw' ? 'Read in colour' : 'Read in black and white';
+      };
+      render();
+      toggle.addEventListener('click', function(e){
+        e.preventDefault();
+        var cur = document.documentElement.getAttribute('data-theme') || 'paper';
+        var next = cur === 'paper-bw' ? 'paper' : 'paper-bw';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('mfm-theme', next); } catch (e) {}
+        render();
+      });
+    }
+  } catch (e) {}
 })();
 </script>
+
 </body>
 </html>

@@ -1,194 +1,692 @@
-/* ── Site layer ──────────────────────────────────────────────────────────────
-   Loaded by the portfolio, the Toolbox index and the case studies. NOT by the
-   four tools: a question card is a product surface and stays on engine.css alone.
+/* ==========================================================================
+   Marketing FM — the paper-newspaper layer
+   Governs /, /audit, /january-campaign, /the-4-month-fill
+   Not loaded by tool pages (/who-stopped-coming etc) — those stay on engine.css.
+   See DESIGN.md and PRODUCT.md for the register.
 
-   Everything here is additive. engine.css owns the tokens and the colour identity;
-   this file adds the serif display register, the wider container, the committed
-   terracotta fields and the chart primitives.
-   ───────────────────────────────────────────────────────────────────────────── */
+   Rules held to:
+   - Off-white body at chroma 0 (NOT cream/sand/parchment — impeccable's own trap)
+   - Paper feel via SVG grain overlay, not tint
+   - Typewriter type carries the character
+   - Zero external requests — all seven fonts self-hosted from _engine/fonts/
+   - Every screen a history entry (multi-page architecture)
+   - 4.5:1 contrast body minimum
+   - prefers-reduced-motion respected
+   ========================================================================== */
 
-:root{
-  /* Georgia first, deliberately. Drawn for screen legibility rather than fashion,
-     reads institutional rather than styled, and needs no download — a web font is
-     an external request, and these pages load on Kenyan mobile data. */
-  --font-serif:Georgia,ui-serif,"Times New Roman",serif;
-  --font-mono:ui-monospace,"Cascadia Code",Consolas,"Courier New",monospace;
-  --measure:34rem;          /* ~65ch of prose */
-  --site-max:78rem;
-  --gut:clamp(18px,5vw,56px);
+/* Font-face declarations for the seven typewriter fonts now live in engine.css
+   so every page (tool pages too) loads them. This layer only defines the paper
+   pages' own display/body/spec/hand tokens on top of what engine.css exposes. */
+
+/* ---------------- Paper tokens (see DESIGN.md §Color) ---------------- */
+
+:root[data-theme="paper"], :root.paper {
+  --ink:        #141414;
+  --ink-2:      #3a3a3a;
+  --ink-3:      #6a6a6a;
+
+  --paper:      #faf8f4;
+  --paper-2:    #f2eee7;
+
+  --brand:      #D85A30;
+  --brand-deep: #712B13;
+  --brand-wash: #FAECE7;
+
+  --rule:       #141414;
+  --rule-thin:  #3a3a3a;
+
+  --font-display: "CF Remington", "Established Typewriter", "Special Elite", ui-serif, Georgia, serif;
+  --font-body:    "Traveling Typewriter", "Special Elite", ui-monospace, Consolas, monospace;
+  --font-spec:    "Blade Runner Screen Play", "Special Elite", ui-monospace, monospace;
+  --font-hand:    "Albertsthal Typewriter", "Special Elite", cursive;
+
+  color-scheme: light;
 }
 
-/* ── Shell ─────────────────────────────────────────────────────────────────── */
+/* ⚡ Black-and-white variant, added 22 Sep 2026.
+   Set on <html>: data-theme="paper-bw". Terracotta → black. Keeps every other
+   token (fonts, layout, spacing) identical. This is the "real broadsheet" look:
+   no accent, ink and paper only. */
+:root[data-theme="paper-bw"] {
+  --ink:        #0a0a0a;
+  --ink-2:      #2a2a2a;
+  --ink-3:      #5a5a5a;
 
-.site{max-width:var(--site-max);margin:0 auto;padding:0 var(--gut)}
-.site-wide{max-width:none;padding:0}
+  --paper:      #faf8f4;
+  --paper-2:    #efece5;
 
-/* Vertical rhythm is varied on purpose: generous between arguments, tight inside
-   a group. A single uniform section pad is what makes a page read as a template. */
-section{padding-block:clamp(48px,9vw,104px)}
-section.tight{padding-block:clamp(32px,5vw,56px)}
+  --brand:      #0a0a0a;
+  --brand-deep: #000000;
+  --brand-wash: #eeeae2;
 
-.prose{max-width:var(--measure)}
-.prose p + p{margin-top:.9em}
+  --rule:       #000000;
+  --rule-thin:  #2a2a2a;
 
-/* ── Type ──────────────────────────────────────────────────────────────────── */
+  --font-display: "CF Remington", "Established Typewriter", "Special Elite", ui-serif, Georgia, serif;
+  --font-body:    "Traveling Typewriter", "Special Elite", ui-monospace, Consolas, monospace;
+  --font-spec:    "Blade Runner Screen Play", "Special Elite", ui-monospace, monospace;
+  --font-hand:    "Albertsthal Typewriter", "Special Elite", cursive;
 
-.d1,.d2,.d3{font-family:var(--font-serif);font-weight:400;letter-spacing:-.015em;
-  line-height:1.08;text-wrap:balance}
-.d1{font-size:clamp(2.35rem,7.4vw,5.1rem)}
-.d2{font-size:clamp(1.85rem,4.6vw,3.15rem);line-height:1.12}
-.d3{font-size:clamp(1.3rem,2.6vw,1.85rem);line-height:1.2}
-
-.lead{font-size:clamp(1.05rem,1.9vw,1.3rem);line-height:1.5;color:var(--text-2);
-  text-wrap:pretty}
-.say{font-family:var(--font-serif);font-size:clamp(1.25rem,3.1vw,2rem);line-height:1.3;
-  letter-spacing:-.01em;text-wrap:balance}
-
-/* Figures are countable things, so they get the mono. Nothing else does — mono as
-   a general "technical" costume is a tell. */
-.fig{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
-  letter-spacing:-.02em;font-weight:600}
-
-.kicker{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--text-3)}
-
-a.u{color:var(--brand);text-decoration:none;
-  border-bottom:1px solid color-mix(in srgb,var(--brand) 35%,transparent);
-  padding-bottom:1px}
-@media(hover:hover){a.u:hover{border-bottom-color:var(--brand)}}
-
-/* ── The terracotta field ──────────────────────────────────────────────────── */
-/* Committed, not accented: the colour owns the surface where the argument is made. */
-
-.field-brand{background:var(--brand-deep);color:#fdf3ef}
-.field-brand .d1,.field-brand .d2,.field-brand .say{color:#fff}
-.field-brand .lead{color:#f0cdc0}
-.field-brand .kicker{color:#e0a894}
-.field-brand a.u{color:#fff;border-bottom-color:rgba(255,255,255,.45)}
-@media(hover:hover){.field-brand a.u:hover{border-bottom-color:#fff}}
-
-.field-wash{background:var(--brand-wash)}
-.rule{border:0;border-top:1px solid var(--border);margin:0}
-
-/* ── Header ────────────────────────────────────────────────────────────────── */
-
-.top{display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding-block:18px;flex-wrap:wrap}
-.top .mark{display:flex;align-items:center;gap:9px;font-weight:700;font-size:.95rem;
-  letter-spacing:.01em;color:var(--text);text-decoration:none}
-.top nav{display:flex;gap:clamp(12px,2.4vw,26px);font-size:.9rem}
-.top nav a{color:var(--text-2);text-decoration:none}
-@media(hover:hover){.top nav a:hover{color:var(--brand)}}
-
-/* ── Work ──────────────────────────────────────────────────────────────────── */
-/* Deliberately not a uniform card grid. Each study is a full band with its own
-   chart; the rhythm comes from the data, not from repeated boxes. */
-
-.study{display:grid;gap:clamp(22px,4vw,54px);align-items:start;
-  grid-template-columns:1fr;padding-block:clamp(34px,5.5vw,62px);
-  border-top:1px solid var(--border)}
-@media(min-width:56rem){
-  .study{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
-  .study.flip > .study-viz{order:-1}
+  color-scheme: light;
 }
-.study-body{max-width:var(--measure)}
-.study h3{font-family:var(--font-serif);font-weight:400;
-  font-size:clamp(1.45rem,3.2vw,2.15rem);line-height:1.15;letter-spacing:-.015em;
-  margin:.35em 0 .5em;text-wrap:balance}
-.study p{color:var(--text-2);font-size:1rem}
-.study dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
-  gap:14px 18px;margin:20px 0 0;border-top:1px solid var(--border-2);padding-top:16px}
-.study dt{font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--text-3);margin-bottom:3px}
-.study dd{font-family:var(--font-mono);font-variant-numeric:tabular-nums;
-  font-size:1.18rem;font-weight:600;letter-spacing:-.02em}
 
-/* ── Charts ────────────────────────────────────────────────────────────────── */
-/* Inline SVG, no library, no external request. Every figure drawn here also appears
-   in the source document — a chart may never introduce a number the work does not
-   contain. */
+/* ---------------- Body + paper grain ---------------- */
 
-.viz{width:100%;height:auto;display:block;overflow:visible}
-.viz text{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
-.viz .lab{font-size:11px;fill:var(--text-3);letter-spacing:.02em}
-.viz .val{font-size:13px;fill:var(--text);font-weight:600}
-.viz .bar{fill:var(--brand)}
-.viz .bar-mute{fill:var(--border)}
-.viz .axis{stroke:var(--border);stroke-width:1}
-.viz .dash{stroke:var(--text-3);stroke-width:1;stroke-dasharray:3 3}
-.viz .line{fill:none;stroke:var(--brand);stroke-width:2.5;
-  stroke-linejoin:round;stroke-linecap:round}
-.viz .line-2{fill:none;stroke:var(--text-3);stroke-width:1.5;stroke-dasharray:4 3}
-.viz-note{font-size:.82rem;color:var(--text-3);margin-top:10px;line-height:1.5;
-  max-width:42ch}
-
-/* ── The offer ─────────────────────────────────────────────────────────────── */
-
-.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
-.price .n{font-family:var(--font-mono);font-size:clamp(2.2rem,5.4vw,3.4rem);
-  font-weight:700;letter-spacing:-.035em;line-height:1}
-.price .per{font-size:.95rem;color:var(--text-3)}
-
-.steps{counter-reset:s;display:grid;gap:2px;margin-top:26px}
-.steps li{counter-increment:s;list-style:none;display:grid;
-  grid-template-columns:2.1rem 1fr;gap:14px;padding:15px 0;
-  border-top:1px solid var(--border-2);align-items:baseline}
-.steps li::before{content:counter(s);font-family:var(--font-mono);font-size:.82rem;
-  font-weight:700;color:var(--brand)}
-.steps b{display:block;font-weight:600;margin-bottom:2px}
-.steps span{color:var(--text-2);font-size:.95rem}
-
-/* ── Actions ───────────────────────────────────────────────────────────────── */
-
-.cta{display:inline-flex;align-items:center;gap:9px;background:var(--brand);color:#fff;
-  font-weight:600;font-size:1rem;padding:15px 26px;border-radius:var(--radius-md);
-  text-decoration:none;transition:opacity .15s}
-.cta:active{opacity:.85}
-@media(hover:hover){.cta:hover{opacity:.9}}
-.field-brand .cta{background:#fff;color:var(--brand-deep)}
-.cta-2{display:inline-flex;align-items:center;gap:8px;color:var(--text-2);
-  font-size:.95rem;text-decoration:none;padding:15px 4px}
-.cta-2 .ar{color:var(--brand)}
-@media(hover:hover){.cta-2:hover{color:var(--text)}}
-.field-brand .cta-2{color:#f0cdc0}
-.field-brand .cta-2 .ar{color:#fff}
-
-.acts{display:flex;align-items:center;gap:clamp(10px,3vw,28px);flex-wrap:wrap;
-  margin-top:30px}
-
-/* ── Tool links on the site pages ──────────────────────────────────────────── */
-
-.toolrow{display:grid;gap:0;margin-top:8px}
-.toolrow a{display:grid;grid-template-columns:1fr auto;gap:8px 18px;align-items:center;
-  padding:17px 0;border-top:1px solid var(--border);text-decoration:none;color:inherit}
-.toolrow a:last-child{border-bottom:1px solid var(--border)}
-.toolrow .tt{font-weight:600;font-size:1.02rem}
-.toolrow .ts{color:var(--text-3);font-size:.88rem;margin-top:2px}
-.toolrow .go{color:var(--brand);font-size:.88rem;font-weight:600;white-space:nowrap}
-@media(hover:hover){.toolrow a:hover .tt{color:var(--brand)}
-  .toolrow a:hover .go{text-decoration:underline}}
-
-/* ── Caveats ───────────────────────────────────────────────────────────────── */
-/* Proof discipline means most claims travel with one of these. */
-
-.note{border-left:2px solid var(--border);padding-left:14px;color:var(--text-3);
-  font-size:.88rem;line-height:1.55;max-width:46ch}
-.note b{color:var(--text-2);font-weight:600}
-
-/* ── Footer ────────────────────────────────────────────────────────────────── */
-
-.foot{border-top:1px solid var(--border);padding-block:34px 44px;
-  display:flex;gap:18px 40px;flex-wrap:wrap;justify-content:space-between;
-  font-size:.88rem;color:var(--text-3)}
-.foot a{color:var(--text-3)}
-@media(hover:hover){.foot a:hover{color:var(--brand)}}
-
-/* Entrance: one page-load reveal on the hero only, never per section. Content is
-   visible by default and the transition enhances it — a reveal gated on a class
-   that never fires ships a blank page. */
-@media(prefers-reduced-motion:no-preference){
-  .rise{animation:rise .62s cubic-bezier(.22,1,.36,1) both}
-  .rise-2{animation-delay:.09s}
-  .rise-3{animation-delay:.17s}
+body.paper {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* Paper texture — two overlaid layers, all inline, zero external requests.
+   Layer 1 (::before): fine grain — fractal noise at high frequency for the
+   general paper-fibers feel. Larger tile (400px) so the repeat is invisible.
+   Layer 2 (::after): coarser "long fibers" — lower-frequency noise, tighter
+   contrast, tuned to read as visible paper stock rather than a screen effect.
+   Both use multiply blend so they darken warmly on the off-white base without
+   tinting the colour. Rendered as static (not animated). */
+body.paper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='11'/><feColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 1.2 -0.1'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  background-size: 400px 400px;
+  mix-blend-mode: multiply;
+}
+body.paper::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.18' numOctaves='3' seed='23'/><feColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  background-size: 520px 520px;
+  mix-blend-mode: multiply;
+}
+/* On B&W the texture desaturates to pure ink; slightly heavier so the paper
+   quality still reads without the terracotta accent doing that job. The
+   data-theme attribute lives on <html>, not <body>, so the selector reaches
+   down through :root. */
+:root[data-theme="paper-bw"] body.paper::before { opacity: 0.11; }
+:root[data-theme="paper-bw"] body.paper::after { opacity: 0.07; }
+
+@media (prefers-reduced-motion: no-preference) {
+  body.paper {
+    /* Nothing on load-motion here; the masthead .rise class handles it. */
+  }
+}
+
+/* ---------------- Layout containers ---------------- */
+
+/* Landing surface — home. Wider to hold the three-column front page. */
+.paper .wrap {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+  position: relative;
+  z-index: 2;
+}
+
+/* Tier detail pages — long-form reading. Narrower. */
+.paper .story {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------------- Masthead ---------------- */
+
+.masthead {
+  padding: 32px 0 20px;
+  border-bottom: 4px double var(--rule);
+  text-align: center;
+}
+.masthead .nameplate {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 46px);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+.masthead .nameplate a {
+  color: inherit;
+  text-decoration: none;
+}
+.masthead .slug {
+  margin-top: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.masthead .slug span + span::before {
+  content: "·";
+  margin: 0 0.6em;
+  color: var(--ink-3);
+}
+
+/* Rise on first paint — one-time, home only. Class-added via inline script. */
+.masthead.rise {
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
+}
+.masthead.rise.in {
+  transform: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .masthead.rise, .masthead.rise.in { transform: none; opacity: 1; transition: none; }
+}
+
+/* ---------------- Nav ---------------- */
+
+.paper nav.top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 28px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-body);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+.paper nav.top a {
+  color: var(--ink);
+  text-decoration: none;
+  padding: 4px 2px;
+  position: relative;
+}
+.paper nav.top a[aria-current="page"] {
+  border-bottom: 2px solid var(--brand);
+}
+@media (hover: hover) {
+  .paper nav.top a:hover {
+    color: var(--brand-deep);
+  }
+}
+
+/* ---------------- Yellow hero — the elevator pitch band ----------------
+   Full-width, yellow highlighter background — documentary-newspaper style.
+   In B&W mode the yellow drops to a warm gray so the "black and white"
+   promise holds. */
+
+.hero-yellow {
+  background: var(--hero-bg, #f7d64a);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  padding: clamp(28px, 5vw, 44px) 0;
+  margin: 14px 0 30px;
+  position: relative;
+  z-index: 2;
+}
+.hero-yellow .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 10px;
+  opacity: 0.85;
+}
+.hero-yellow .pitch {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+.hero-yellow .pitch .mark {
+  /* Highlighter inside the highlighter: a second, deeper yellow underline
+     that sits under the bottom half of the word, like a marker stroke on
+     a page that is already yellow. */
+  background: linear-gradient(180deg, transparent 55%, var(--hero-mark, #ffb84a) 55%, var(--hero-mark, #ffb84a) 92%, transparent 92%);
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-yellow .lead {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--ink);
+  margin: 0 0 20px;
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.hero-yellow .lead strong {
+  font-weight: 400;
+  border-bottom: 2px solid var(--ink);
+}
+.hero-yellow .actions {
+  margin-top: 12px;
+}
+/* Black-ink CTAs, tuned to read on yellow. */
+.cta-ink {
+  background: var(--ink);
+  color: var(--hero-bg, #f7d64a);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink:hover { background: #000; color: #fff; border-color: #000; }
+}
+.cta-ink-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink-ghost:hover { background: var(--ink); color: var(--hero-bg, #f7d64a); }
+}
+
+/* Colourway overrides for the hero: yellow in colour mode, warm gray in B&W. */
+:root[data-theme="paper"] { --hero-bg: #f7d64a; --hero-mark: #ffb84a; }
+:root[data-theme="paper-bw"] { --hero-bg: #e6e2d8; --hero-mark: #cfc9bd; }
+
+/* ---------------- Banner (free teardown) ---------------- */
+
+.banner {
+  background: var(--brand-wash);
+  border-top: 1px solid var(--brand);
+  border-bottom: 1px solid var(--brand);
+  padding: 28px clamp(16px, 4vw, 40px);
+  margin: 22px 0 32px;
+}
+.banner .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-deep);
+  margin: 0 0 8px;
+}
+.banner h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 32px);
+  color: var(--brand-deep);
+  margin: 0 0 10px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.banner p {
+  margin: 0 0 16px;
+  max-width: 60ch;
+  color: var(--ink);
+}
+
+/* ---------------- Editorial (the through-line) ---------------- */
+
+.editorial {
+  padding: 44px 0 40px;
+  border-bottom: 1px solid var(--rule);
+}
+.editorial h1 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 6.5vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+  max-width: 22ch;
+}
+.editorial h1 em {
+  color: var(--brand-deep);
+  font-style: normal;
+}
+.editorial .byline {
+  margin-top: 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ---------------- Three-column front page (the tier stories) ---------------- */
+
+.stories {
+  display: grid;
+  gap: 40px 32px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.stories .column {
+  padding: 0 8px;
+  border-left: 1px solid var(--rule-thin);
+}
+.stories .column:first-child { border-left: 0; padding-left: 0; }
+@media (max-width: 900px) {
+  .stories .column { border-left: 0; padding-left: 0; }
+}
+
+.column .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0 0 8px;
+}
+.column h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+.column h2 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .column h2 a:hover { color: var(--brand-deep); }
+}
+.column .deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(15px, 1.8vw, 17px);
+  color: var(--ink-2);
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+.column .lede {
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+.column .price {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.6vw, 26px);
+  color: var(--brand-deep);
+  margin: 4px 0 12px;
+  letter-spacing: -0.01em;
+}
+.column .price small {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+  margin-left: 4px;
+  font-weight: 400;
+}
+.column .more {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--brand);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--brand);
+  padding-bottom: 2px;
+  margin-top: 4px;
+}
+@media (hover: hover) {
+  .column .more:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
+}
+.column .more::after { content: " →"; }
+
+/* ---------------- Long-form (tier detail page body) ---------------- */
+
+.story h1 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 32px 0 8px;
+  text-wrap: balance;
+}
+.story .deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(17px, 2vw, 20px);
+  color: var(--ink-2);
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+.story h2 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  letter-spacing: -0.01em;
+  margin: 40px 0 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.story h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 28px 0 8px;
+}
+.story p, .story li {
+  font-family: var(--font-body);
+  color: var(--ink);
+  max-width: 65ch;
+}
+.story p { margin: 0 0 16px; }
+.story ul, .story ol { padding-left: 24px; }
+.story li { margin-bottom: 8px; }
+.story .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+.story blockquote {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-2);
+  border-left: 3px solid var(--brand);
+  padding: 4px 0 4px 18px;
+  margin: 20px 0;
+  max-width: 60ch;
+}
+.story .price-huge {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 56px);
+  color: var(--brand-deep);
+  letter-spacing: -0.02em;
+  margin: 16px 0;
+}
+.story .price-huge small {
+  font-family: var(--font-body);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-left: 8px;
+}
+
+/* Spec block — Blade Runner face — sparingly, on tier detail pages */
+.story .spec {
+  font-family: var(--font-spec);
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 20px 22px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  margin: 24px 0;
+  white-space: pre-wrap;
+}
+
+/* Handwritten margin note — Albertsthal Typewriter — one per page max.
+   Kept as a slightly heavier typewriter face and italicised so it reads as a
+   margin annotation rather than another column of body copy. */
+.story .margin-note {
+  font-family: var(--font-hand);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--brand-deep);
+  border-top: 1px dashed var(--brand);
+  padding-top: 10px;
+  margin: 20px 0;
+  max-width: 44ch;
+}
+
+/* ---------------- CTAs ---------------- */
+
+.cta, .cta-ghost {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  min-height: 44px;
+  line-height: 20px;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.cta {
+  background: var(--brand);
+  color: var(--paper);
+  border: 1.5px solid var(--brand);
+  font-weight: 500;
+}
+.cta::after { content: " →"; }
+@media (hover: hover) {
+  .cta:hover { background: var(--brand-deep); border-color: var(--brand-deep); }
+}
+.cta-ghost {
+  background: transparent;
+  color: var(--brand);
+  border: 1.5px solid var(--brand);
+}
+@media (hover: hover) {
+  .cta-ghost:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
+}
+.cta:focus-visible, .cta-ghost:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0 4px;
+}
+
+/* ---------------- Footer ---------------- */
+
+.paper footer.site {
+  padding: 40px 0 60px;
+  border-top: 4px double var(--rule);
+  margin-top: 40px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-2);
+  text-align: center;
+}
+.paper footer.site a {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+@media (hover: hover) {
+  .paper footer.site a:hover { color: var(--brand-deep); }
+}
+.paper footer.site .row + .row {
+  margin-top: 8px;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+/* ---------------- Case-study bar (embedded on /audit) ---------------- */
+
+.cases {
+  padding: 32px 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 32px;
+}
+.cases .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 8px;
+}
+.cases h2 { margin-top: 0; padding-top: 0; border-top: 0; }
+.cases .case {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule-thin);
+}
+.cases .case:last-child { border-bottom: 0; }
+.cases .case .byline {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.cases .case h3 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.4vw, 22px);
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.cases .case p { margin: 0 0 8px; max-width: 62ch; }
+.cases .case .numbers {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+  margin: 6px 0 0;
+}
+
+/* ---------------- View Transitions API — cross-document paper fold ---------------- */
+
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  ::view-transition-old(root) {
+    animation-name: paper-fold-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: paper-fold-in;
+  }
+}
+@keyframes paper-fold-out {
+  0%   { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes paper-fold-in {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* ---------------- Print (real newspaper cousin — hidden CSS bonus) ---------------- */
+
+@media print {
+  body.paper::before { display: none; }
+  .banner, .cta, .cta-ghost { border: 1px solid #000; background: #fff; color: #000; }
+  nav.top, footer.site { display: none; }
+}

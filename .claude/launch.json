@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "tools",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8099", "--directory", "."],
-      "port": 8099
+      "name": "paper",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "http-server", "-p", "8788", "-c-1", "--cors"],
+      "port": 8788
     }
   ]
 }

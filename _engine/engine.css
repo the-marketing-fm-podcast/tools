@@ -1,5 +1,21 @@
+/* ---------------- Typewriter fonts (site-wide) ----------------
+   Seven typewriter faces, all self-hosted; loaded on every page so tool pages
+   inherit the paper aesthetic's typography without adopting its whole layout.
+   Only Special Elite (Apache 2.0) is commercially cleared — see
+   _engine/fonts/LICENCE_STATUS.md for the full status and Karl's ship-anyway
+   decision (22 Sep 2026). */
+@font-face{font-family:"CF Remington";src:url("/_engine/fonts/CfRemingtonTypewriter.ttf") format("truetype");font-display:swap;font-weight:400}
+@font-face{font-family:"Traveling Typewriter";src:url("/_engine/fonts/TravelingTypewriter.ttf") format("truetype");font-display:swap;font-weight:400}
+@font-face{font-family:"Established Typewriter";src:url("/_engine/fonts/EstablishedTypewriter.otf") format("opentype");font-display:swap;font-weight:400}
+@font-face{font-family:"Special Elite";src:url("/_engine/fonts/SpecialElite.ttf") format("truetype");font-display:swap;font-weight:400}
+@font-face{font-family:"Blade Runner Screen Play";src:url("/_engine/fonts/BladeRunnerScreenPlay.ttf") format("truetype");font-display:swap;font-weight:400}
+/* Typewriter Keys removed 22 Sep 2026 — the circular-key glyphs made body copy unreadable
+   as words. Handwritten accent role reassigned to Albertsthal Typewriter. */
+@font-face{font-family:"Albertsthal Typewriter";src:url("/_engine/fonts/AlbertsthalTypewriter.ttf") format("truetype");font-display:swap;font-weight:400}
+
 :root{
-  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-sans:"Traveling Typewriter","Special Elite",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-display:"CF Remington","Established Typewriter","Special Elite",ui-serif,Georgia,serif;
   --radius-md:8px; --radius-lg:12px;
   --canvas:#f6f6f4; --bg:#ffffff; --bg-2:#f1f1ef;
   --text:#1a1a1a; --text-2:#565656; --text-3:#888a8d;
@@ -183,8 +199,11 @@ h1,.bandname,.qtext{text-wrap:balance}
 /* On a laptop a short question card stranded at the top of an 800px window reads
    like a rendering error. margin:auto on the flex child centres it when there is
    spare room and does nothing when the content is taller than the viewport, so
-   long result pages never clip. */
+   long result pages never clip.
+   Scoped to tool pages only: paper pages have their own multi-section layout,
+   and applying 100vh min-height to every `.wrap` there would turn every
+   masthead, banner, editorial and main into a full-screen block. */
 @media (min-width:900px){
-  .wrap{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
-  .wrap #app{margin-block:auto;width:100%}
+  body:not(.paper) .wrap{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+  body:not(.paper) .wrap #app{margin-block:auto;width:100%}
 }

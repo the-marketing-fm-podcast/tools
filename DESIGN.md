@@ -1,145 +1,200 @@
 # Design
 
-The visual system for `marketing-fm/tools` — the four diagnostics and the Views to Members site that
-now sits above them. Captured 19 September 2026 from `_engine/engine.css`, which is the single source
-of truth and is stitched into every page at build time.
+The visual system for `marketing-fm/tools` after the paper-newspaper redesign, 22 Sep 2026.
+Governs the three-tier landing surface at `/`, `/audit`, `/january-campaign`, `/the-4-month-fill`.
+The four free tools at `/who-stopped-coming`, `/dependency-audit`, `/cost-of-repeating`,
+`/business-level-test` — and the tools index at `/tools` — are **untouched** in this pass: they
+work, they pass 113 harness assertions, and their register (analyst's-desk) still fits the diagnostic
+job they do.
 
 ## Theme
 
-**Light only, by decision.** `data-theme="light"` on `<html>`, plus `color-scheme: light` and a matching
-`theme-color`, so the Android address bar and native controls follow the page instead of the phone. The
-full dark palette stays defined in `engine.css` — removing the attribute brings it back.
+**Light only, by decision.** `data-theme="paper"` on `<html>` is the default; `data-theme="paper-bw"`
+switches to the black-and-white variant. Both hold `color-scheme: light`. Rule preserved from the
+earlier register.
 
-The physical scene that settles it: a gym marketer on a budget Android, on mobile data, in daylight,
-between other tasks. Dark would be a style choice fighting the ambient light.
+The physical scene that anchors the new pages: a gym MD reading a broadsheet folded on a coffee-shop
+table, mid-morning, sun through a window.
+
+### ⚡ Two colourways, one register (22 Sep 2026)
+
+| Variant | When it wins | What changes |
+|---|---|---|
+| `data-theme="paper"` | Default. Marketing FM's identity carries into the page | Terracotta accent on links, kickers, price figures, CTAs, editorial-em emphasis |
+| `data-theme="paper-bw"` | The real broadsheet look — a page that reads as ink and paper only | Every terracotta token → near-black; slightly heavier paper texture to compensate for the missing accent colour |
+
+**Switch mechanics.** Every paper page has a small `Read in black and white` link in the footer that
+flips the attribute on `<html>` and persists it via `localStorage['mfm-theme']`. `?theme=bw` or
+`?theme=colour` on the URL also flips it — useful for sharing a specific rendering.
 
 ## Color
 
-**Strategy: committed.** Terracotta carries real surface area on site pages — the hero, section breaks,
-the offer block — not a sprinkle of accent on neutral. On tool pages it stays restrained, because a
-question card is a product surface and the colour there is functional.
+**Strategy: restrained ink + committed accent.** Body is a true off-white at chroma 0 — not a
+warm-tinted parchment. Ink for text. **Terracotta survives from the earlier register as the one
+accent that carries brand identity**; kept because Karl's business has already been shipping in
+that colour on the free tools and on the shipped launch video, and identity-preservation wins over
+a fresh palette when there's an established one.
 
-⚠️ **This is a deliberate correction.** The first pass wrote *restrained* for both, and the brand
-register is blunt that restraint without intent reads as mediocre rather than refined: *safe = invisible.*
-Terracotta predates this work and is the identity, so committing to it is both the braver and the
-more faithful move.
-
-**The named reference for the strategy:** a terracotta field carrying the argument, the way Klim's
-specimen pages let one colour own the page — but with the type doing the talking rather than the
-colour being the subject.
+⚠️ **The AI cream/parchment trap.** impeccable's own reference is explicit: tokens named `--paper`,
+`--cream`, `--parchment` and warm-tinted near-white body backgrounds are the AI monoculture move of
+2026. **The newspaper feel here is typographic, not chromatic.** Grain overlay carries the paper
+quality; the base is off-white at zero chroma.
 
 | Token | Light | Role |
 |---|---|---|
-| `--brand` | `#D85A30` | Terracotta. Accents, links, the one primary action |
-| `--brand-soft` | `#F5C4B3` | Borders on brand-washed blocks |
-| `--brand-wash` | `#FAECE7` | Tinted background for a figure that matters |
-| `--brand-deep` | `#712B13` | Headline figures, emphasis inside washed blocks |
-| `--canvas` / `--bg` / `--bg-2` | `#f6f6f4` / `#ffffff` / `#f1f1ef` | Page, card, recessed |
-| `--text` / `--text-2` / `--text-3` | `#1a1a1a` / `#565656` / `#888a8d` | Ink, secondary, tertiary |
-| `--border` / `--border-2` | `#e2e2df` / `#ededea` | Rules and hairlines |
-| `--ok-bg` / `--ok-text` | `#e6f4ed` / `#15875a` | Resolved, passing |
-| `--warn-bg` / `--warn-text` | `#fbf1e0` / `#b45309` | Caution, blockers |
+| `--ink` | `#141414` | Body text, headlines, rules |
+| `--ink-2` | `#3a3a3a` | Secondary text, decks, bylines |
+| `--ink-3` | `#6a6a6a` | Kickers, captions, metadata |
+| `--paper` | `#faf8f4` | Body background — off-white at effective chroma 0 |
+| `--paper-2` | `#f2eee7` | Recessed surfaces (banner, footer) — slightly warmer only where a section break needs it |
+| `--brand` | `#D85A30` | Terracotta. Section rules, links, the primary action |
+| `--brand-deep` | `#712B13` | Deep terracotta for headline figures and emphasis inside washed blocks |
+| `--brand-wash` | `#FAECE7` | Tinted background for the front-page banner |
+| `--rule` | `#141414` | Horizontal rules between sections (matches ink for that broadsheet weight) |
+| `--rule-thin` | `#3a3a3a` | Kicker underlines, table hairlines |
 
-⛔ **No cream, sand, beige or parchment body background.** `--canvas` is a near-neutral at effectively
-zero chroma, not a warm tint. ⛔ **No gradients, no gradient text, no glassmorphism.**
+⛔ **No gradient, no gradient text, no glassmorphism.** ⛔ **No sand/beige/wheat/parchment.**
+
+**Grain overlay.** A single SVG `feTurbulence` filter applied as a `background-image` on `body`,
+opacity ~4%, non-animated, respecting `prefers-reduced-motion` (still shown because it's static
+and non-motion — reduced-motion only kills animation). This is what makes the off-white read as
+paper without tinting it.
 
 ## Typography
 
-**System stacks only.** Zero external requests is a hard constraint — these pages load on poor mobile
-data and are sometimes sent as a file over WhatsApp.
+**Seven typewriter fonts allocated to four roles.** Preserved from Karl's decision — 3 fonts per
+page maximum, 4 across the whole site. All self-hosted; zero external requests.
 
-| Token | Stack | Used for |
+| Token | Font | Used for |
 |---|---|---|
-| `--font-sans` | `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif` | Body, UI, navigation |
-| ⚡ `--font-serif` | `Georgia, ui-serif, "Times New Roman", serif` | **Display headings and pull quotes on site pages.** Added 19 Sep |
-| ⚡ `--font-mono` | `ui-monospace, "Cascadia Code", Consolas, monospace` | **Figures and tabular data only.** Added 19 Sep |
+| `--font-display` | **CF Remington Typewriter** | Masthead, hero, tier column headlines, prices. Heavier weight reads at scale |
+| `--font-body` | **Traveling Typewriter** | Body prose, decks, ledes, tables. Best legibility at 16–18px |
+| `--font-spec` | **Blade Runner Screenplay** | Spec-document register — offer sheets and contract-style pages only. **Partial demo font**; use only for headers where the character set is confirmed |
+| `--font-hand` | **Albertsthal Typewriter** | Handwritten accents — margin notes, signatures, callouts. **Used sparingly** — max one instance per page. Italicised so it reads as an annotation, not a second column of body copy |
+| `--font-alt-display` | **Established Typewriter** | Alternate display face, tested against CF Remington in `/live` before final lock |
+| `--font-alt-body` | **Special Elite** | Alternate body face, tested against Traveling in `/live` before final lock |
+| ⛔ ~~`--font-alt-hand` · Typewriter Keys~~ | **DROPPED 22 Sep 2026** | The circular-key glyphs made body copy unreadable as words. `--font-hand` now uses Albertsthal Typewriter directly, no alternate |
 
-**Pairing rule:** serif for argument, sans for reading, mono for anything countable. The contrast axis is
-serif-versus-sans, never two similar sans faces.
+**Pairing rule:** display + body come from the typewriter family (contrast axis is weight and
+proportion, not two different families). Spec-doc is a distinct face for the offer detail pages
+where the contract register earns its place. Handwritten is a deliberate one-per-page accent.
 
-> ### Why Georgia, named deliberately rather than reached for
-> **Three brand-voice words: sturdy, exact, unhurried.** The physical object is a ruled ledger with
-> figures entered by hand — the repo's own *kasuku book*, not a magazine.
->
-> Georgia is **not on the reflex-reject list**, was drawn for screen legibility rather than fashion, has
-> true tabular-ish figures, and reads institutional rather than styled. ⚠️ **It is also the one serif
-> that needs no download**, which matters: a web font is an external request, and these pages load on
-> Kenyan mobile data and are sometimes sent as a file over WhatsApp.
->
-> ⛔ **Mono is confined to figures.** The register bans *"monospace as lazy shorthand for technical"* —
-> here it marks things that are countable, which is the actual subject, not a costume.
+⚠️ **Font licence status.** 6 of 7 fonts are non-commercial licences. Karl ships anyway; the
+fallback stack (Special Elite / Courier Prime / IBM Plex Mono, all commercially cleared) is
+documented in `_engine/fonts/LICENCE_STATUS.md`.
 
-- `h1`: `clamp(26px, 6.5vw, 36px)`, `letter-spacing: -.02em`, `line-height: 1.15`
-- Body: 16px, `line-height: 1.55`
-- `.big` headline figure: `clamp(38px, 12vw, 60px)`, weight 800, `letter-spacing: -.035em`
-- `text-wrap: balance` on headings, `pretty` on prose, `tabular-nums` on figures
+### Type scale
+
+- Masthead: `clamp(24px, 3.5vw, 32px)`, letter-spacing `0.06em`, uppercase
+- H1 / editorial headline: `clamp(28px, 6.5vw, 56px)`, `letter-spacing: -0.02em`, `line-height: 1.1`
+- H2 / tier column headline: `clamp(22px, 3vw, 32px)`, `letter-spacing: -0.015em`, `line-height: 1.15`
+- Kicker: `13px` uppercase, letter-spacing `0.14em`, colour `--ink-3`
+- Deck (h2 subhead): `clamp(16px, 2vw, 20px)`, italic
+- Body: `16px` on mobile, `17px` desktop, `line-height: 1.6`
+- Price / countable: `clamp(28px, 5vw, 44px)`, `--font-display`
+- `text-wrap: balance` on h1–h3
+- `text-wrap: pretty` on prose
+- `tabular-nums` on figures
 - `overflow-wrap: anywhere` where pasted content can appear
 
 ## Layout
 
-- **Tool pages: 640px max.** One column, thumb-reachable, unchanged.
-- ⚡ **Site pages: wider.** The 640px `.wrap` is correct for a question card and too narrow for a
-  landing page. Site pages use a wider container with prose blocks still capped at 65–75ch.
+### Container
+
+- **Landing pages**: max-width `72rem` (~1152px). Wider than the tool-page 640px because the
+  three-column front-page structure needs the width.
+- **Tier detail pages** (`/audit`, `/january-campaign`, `/the-4-month-fill`): max-width `48rem`
+  (~768px). Long-form reading. One column.
+- **Tool pages**: `wrap` at 640px, **unchanged** — see the tool-page architecture already documented
+  in the existing register.
+
+### Front-page structure
+
+```
+──── MASTHEAD (nameplate + date) ────
+──── NAV (5 links) ────
+▓ BANNER — free teardown CTA ▓
+──── EDITORIAL — the through-line ────
+COLUMN 1 ┃ COLUMN 2 ┃ COLUMN 3
+(tier)    (tier)     (tier)
+──── FOOTER ────
+```
+
+Three columns via `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` — no breakpoints,
+naturally collapses to one column on narrow viewports (any width < 900px shows a single stacked
+column).
+
+### Rules
+
+- Horizontal rules (`hr`) between sections at `--rule` weight. Broadsheet-heavy 2px on masthead,
+  1px between story columns.
+- **No side-stripe borders. No nested cards.** Rule preserved from the earlier DESIGN.md.
 - Side padding respects `env(safe-area-inset-*)` for landscape notches.
-- Radii: 8px medium, 12px large. Nothing else.
-- ⛔ **No nested cards.** ⛔ **No identical three-card grids.** ⛔ **No side-stripe borders** — the one
-  existing `inset 3px 0` on `.rung.here` is a state indicator inside a ladder, not decoration, and does
-  not generalise.
+- Radii: **0.** Newspapers don't have rounded corners. Rule breaks for one thing only: the CTA
+  button, at 4px, so it still reads as a button.
 
 ## Motion
 
-Minimal and functional. Transitions are `.12s`–`.25s` on colour and opacity only; no layout animation.
-`prefers-reduced-motion: reduce` collapses everything to `.01ms` and is already implemented globally.
+**Minimal and intentional.** Two moves only:
 
-⚠️ Content is never gated behind a reveal transition — a class-triggered reveal that does not fire ships
-a blank section.
+1. **View Transitions API on route change** — cross-document page-turn. Progressive enhancement:
+   Chromium 111+ and Safari 18+ get the paper-fold transition; older browsers get an instant
+   navigation. Gracefully degrades.
+2. **Masthead rise on first paint** — one-time, 200ms, ease-out-quart. On the home page only.
+
+⛔ **No typewriter character-by-character reveal on hero copy.** Considered and dropped. The
+Editorial headline is the through-line — cognitively heavy prose. A reveal animation gates the
+reader's ability to scan it and imposes cost on repeat visitors. Newspapers don't animate.
+
+⛔ **No decorative scroll animations.** No parallax, no fade-in-on-scroll, no reveal transitions
+on section headings. The masthead-rise is the only intentional load-in.
+
+Grain SVG overlay is static; it isn't animation.
+
+`prefers-reduced-motion: reduce` collapses everything to 0.01ms. Already implemented globally.
 
 ## Components in use
 
-`.card` · `.btn` / `.btn-ghost` · `.stat` (brand-washed figure block) · `.tool` (index link card) ·
-`.list` / `.item` · `.ladder` / `.rung` · `.big` / `.bigsub` · `.blocker` · `.honest` (left-ruled aside
-for caveats) · `.src` (source line) · `.prog` (step indicator)
+`.masthead` · `.nav` · `.banner` · `.editorial` · `.column` (a tier front-page story) ·
+`.kicker` · `.deck` · `.lede` · `.byline` · `.price` · `.cta` · `.cta-ghost` · `.spec` (screenplay
+block, tier detail pages) · `.margin-note` (handwritten accent) · `.rule` · `.footer`
 
-⚡ **`.honest` is the most important one for the new pages.** It is the caveat voice — a quiet
-left-ruled note in `--text-3` — and proof discipline means most claims travel with one.
+Preserved from the tools' existing engine.css (used only on `/tools` and the four diagnostic
+pages, not on the new landing surface): `.card` · `.btn` / `.btn-ghost` · `.stat` · `.tool` ·
+`.list` / `.item` · `.ladder` / `.rung` · `.big` / `.bigsub` · `.blocker` · `.honest` · `.src` ·
+`.prog`
 
 ## Interaction
 
-Documented in full in `README.md` §*Interface rules this site holds to*, checked against the Web
-Interface Guidelines. The load-bearing ones:
+Unchanged from the previous register. All still governing:
 
-- Every screen is a history entry; Android Back is the primary navigation control.
-- No autofocus on touch — gated on `(hover:hover) and (pointer:fine)`.
-- `touch-action: manipulation` and no tap-highlight flash.
-- `:focus-visible` outlines at 2px in `--brand`, offset 2–3px. Never on tap.
-- `(hover:hover)` states so laptops get feedback that touch devices do not need.
+- Every screen is a history entry; Android Back is primary nav
+- No autofocus on touch — gated on `(hover:hover) and (pointer:fine)`
+- `touch-action: manipulation` and no tap-highlight flash
+- `:focus-visible` outlines at 2px in `--brand`, offset 2–3px. Never on tap
+- `(hover:hover)` states so laptops get feedback that touch devices don't need
 
 ## Bans specific to this project
 
-⛔ **No stock photography.** There are no image assets in any repo, and a gym stock photo on a page that
-sells analysis would be the first lie told.
+⛔ **No stock photography.** Rule preserved from the earlier register.
+⛔ **No cream / sand / beige / parchment body background.** The AI 2026 default — see Colour §.
+⛔ **No SaaS three-tier pricing card layout.** Three columns are newspaper stories, not pricing tiles.
+⛔ **No design-portfolio style.** The evidence is the thinking.
+⛔ **No decorative "eyebrow" uppercase-tracked headings above every section.** Newspapers don't do
+this; they use kickers over specific stories, not on every h2.
+⛔ **No external requests.** Fonts self-hosted (all seven), grain SVG inline, all CSS inline in the
+`<style>` block per page per the existing build pattern.
+⛔ **No JavaScript framework.** Vanilla HTML+CSS. One inline `<script>` for View Transitions API
+detection only.
 
-> ### ⚡ But zero imagery is a bug, and the fix is the data
-> The brand register is explicit: *"text-only pages where typography alone carries the entire visual
-> weight are the failure mode"* — and equally explicit that **data visualisation counts as imagery.**
->
-> **Every case study on this site owns a chart built from its own findings**, inline SVG, no library,
-> no external request:
-> - **rugsbysensei** — 9% like rate against a 0.41% follow rate, as two bars at wildly different
->   heights. The whole argument in one picture.
-> - **Zelha** — five creators plotted on gym focus against gym engagement.
-> - **AskSidney** — average views per video by month, 2023 to 2026, with the median underneath it.
-> - **The gym offer teardown** — the per-month price ladder, showing the curve flattening at twelve
->   months.
->
-> ⚠️ **Every chart is drawn from a number already in the source document.** No chart may introduce a
-> figure that is not in the work it illustrates.
+## The bridge across register: what carries over from the previous DESIGN.md
 
-⛔ **No uppercase tracked eyebrow above every section**, and ⛔ **no ruled-column editorial grammar.**
-The brand register names *"display serif + small mono labels + ruled separators + monochromatic
-restraint"* as a saturated lane with a recognisable fingerprint. The analyst's-desk feel comes from the
-charts, the sourcing and the caveats — **not from magazine furniture.** The existing `.step` and
-`.grouphead` are functional labels inside tools, not section eyebrows on a landing page.
-
-⛔ **No hero-metric template** — big number, small label, three supporting stats, accent. The figures on
-this site belong next to the work that produced them.
+- The whole tool-page architecture (`/who-stopped-coming` etc.) — untouched
+- The four free tools' engine.css — untouched
+- The `?ref=` partner attribution system — carried through onto the new pages
+- The WhatsApp tag mechanism (`[GONE-?]`, `[BLT-L2]`, etc.) — extended with new tags for the new pages
+- The 4.5:1 contrast rule
+- The two-reader rule
+- The proof-discipline stance — no fake logos, no invented outcomes, `no delivered gym campaign yet`
+  said out loud when it applies
+- The terracotta identity colour
