@@ -69,8 +69,11 @@ if (Test-Path $siteDir) {
     if ($name -eq "index") {
       $outFile = Join-Path $root "index.html"
     } else {
-      # first hyphen becomes a directory separator: work-zelha -> work/zelha
-      $rel = $name -replace '^([^-]+)-', '$1/'
+      # A double-dash becomes a directory separator: work--zelha -> work/zelha.
+      # A single hyphen is part of the slug: january-campaign -> january-campaign/.
+      # This lets single-word or hyphenated-slug pages sit flat at /<name>/
+      # while grouped pages (case studies, categorised sub-pages) stay grouped.
+      $rel = $name -replace '--', '/'
       $outDir = Join-Path $root ($rel -replace '/', [IO.Path]::DirectorySeparatorChar)
       if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
       $outFile = Join-Path $outDir "index.html"

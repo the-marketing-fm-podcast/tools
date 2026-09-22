@@ -10,111 +10,134 @@ web
 
 ## Users
 
-Kenyan gym groups — two people, addressed together on the same page.
+Kenyan gym groups — two people, addressed together on the same page, per the standing two-reader rule.
 
-The **owner or MD** can spend and is not in the feed every day. The **head of marketing** owns the
-problem, posts daily, and is measured on a number nobody can attribute. They arrive cold, usually on a
-phone, often on mobile data, from an Instagram DM or a forwarded link.
+The **owner or MD** signs the fees, is not in the feed every day, and is measured by revenue. The
+**head of marketing** owns the daily posting, is measured by a number nobody can attribute, and is
+who forwards a page to a boss who has never met Karl.
 
-The job they are trying to get done is not "buy marketing". It is answer the question their own boss
-keeps asking: *what did all that posting actually produce?*
+They arrive cold on a phone, usually on mobile data, from a WhatsApp forward, an Instagram DM, or a
+link in a bio. **The job they're trying to get done isn't "buy marketing."** It's answer the question
+their boss keeps asking: *what did all that posting actually produce?*
 
-Every artefact therefore has to work twice — sharp enough to grip a practitioner who does this daily,
-and safe enough to survive being forwarded to a boss who has never heard of Marketing FM. Nothing that
-makes the marketer look incompetent can be published, because the marketer is the one who forwards it.
+⛔ **Every page has to work twice** — sharp enough to grip a practitioner who does this daily, safe
+enough to survive being forwarded to a boss who has never heard of Marketing FM. Nothing that makes
+the marketer look incompetent can be published, because the marketer is who forwards it.
 
 ## Product Purpose
 
-The site sells one thing: **Views to Members**, a six-week campaign that gives a gym's content something
-specific to sell, at KSh 25,000.
+The site sells **three tiered products** built on one thesis. From cold visitor to committed buyer:
 
-It exists because the offer had nowhere to live and no evidence attached to it. Four pieces of delivered
-client work already existed, scattered across GitHub Pages and an archive folder, unlinked and
-unexplained. The site's job is to put them in one place and let them make the argument.
+1. **The Priced Teardown** — a paid audit. KSh 20,000. Delivered in 5 business days.
+2. **The January Campaign** — the Views to Members 25K/6-week campaign, sold Oct–Nov only.
+3. **The 4-Month Fill** — a fixed-term SMM consulting engagement, KSh 16,500/week.
 
-Success is a gym sending its price page without being asked twice.
+Above them, one magnet: the **free public-data teardown** that produced this business's only warm
+reply. It occupies the front-page banner slot on the home page.
+
+**Success:** a gym sends its price page over WhatsApp without being asked twice, and the first three
+paid audits deliver — producing the first delivered case study, which every other document in this
+business treats as more valuable than the fee.
 
 ## Positioning
 
-The only person in this market who will read a gym's content and its price list together, and show
-which one is breaking the other.
+**The only person in this market who will read a gym's content and its price list together, and show
+which one is breaking the other.** *(Preserved from the previous register — the argument holds.)*
 
 ## Conversion & proof
 
-- **Primary CTA:** a free teardown of their offer — *send me your price page*, over WhatsApp
-  (254704334027). It is the smallest possible yes, it qualifies the prospect while it runs, and the
-  same public page that qualifies them is the raw material of the deliverable.
-- **Secondary CTA:** run one of the four free tools. Already built, already live, zero marginal cost,
-  and finishing one is the only completion signal the business currently counts.
-- **The line a visitor remembers after ten seconds:** *Views don't become members on their own.*
-- **Belief ladder**, in the order the page has to earn it:
+- **Primary CTA everywhere:** WhatsApp with a pre-filled message and a per-page source-tag —
+  `[TEARDOWN]`, `[JAN-CAMPAIGN]`, `[4-MONTH-FILL]`, `[FREE-TEARDOWN]`. Same `?ref=` partner
+  attribution the existing free tools already carry.
+- **The line a visitor remembers after ten seconds:** the through-line above the fold —
+  *"You have to do sales because you are poor at marketing. You have to do marketing because you are
+  poor at product development — you have no offer."*
+- **Belief ladder**, in the order the home page has to earn it:
   1. This is about gyms, and specifically about gyms that already post.
-  2. The problem is real and it is not my team's fault — every post ends in the same ask.
+  2. The problem isn't the marketer. It's the offer. Every plan is a duration.
   3. This person has actually done this work before, on named businesses, with real numbers.
-  4. The method is repeatable, not a one-off insight.
-  5. There is a version of this that costs me nothing to find out.
-- **Proof on hand** — four delivered pieces, all real, none invented:
-  - `audit-rugsbysensei.html` — 12 videos, ~25,000 views, 9% like rate against a 0.41% follow rate.
-    Delivered 31 July 2026.
-  - `zelha-roster-report` — 840 videos across five creators at a Juja gym, ranked, with one named to
-    contract first.
-  - `AskSidney-Content-tear-down` — 1,829 videos, an entire TikTok history, by theme and by month.
-  - The gym offer teardown — price ladders recomputed per month from two Kenyan gym groups' own
-    published pages.
-- ⛔ **No testimonials, no client logos, no results claims.** None exist. The work itself is the proof,
-  and the format is *what were you doing before this* — never a testimonial.
+  4. There's a version of this that costs me nothing to find out.
+  5. If I upgrade, there's a specific ladder: audit → campaign or fill.
+- **Proof on hand** — four delivered pieces, all real, none invented. Moved **from the home page to
+  `/audit` as *"what this looks like in practice"*** (Karl's decision, 22 Sep 2026). Rugsbysensei,
+  Zelha creator roster, AskSidney catalogue, the two Nairobi gym price teardowns.
+- ⛔ **No testimonials, no client logos, no results claims.** None exist. The work itself is the
+  proof, and the format is *what were you doing before this* — never a testimonial.
 
 ## Brand Personality
 
-An analyst's desk. Editorial, evidence-first, unhurried.
+**A local newspaper's front page.** Editorial, evidence-first, unhurried. Ink on off-white paper.
+Typewriter voice.
 
-Serif for argument, monospace for figures, colour used sparingly and only where it means something. The
-numbers do the talking and the prose stays out of their way. Confident because it is showing its
-working, never because it is asserting loudly.
+The physical scene that anchors it: a gym MD reading a broadsheet folded on a coffee-shop table,
+mid-morning, sun through a window. Not a magazine. Not a design portfolio. **A newspaper — because a
+newspaper's job is to argue with evidence, in public, and be forwarded.**
 
-This is already how the existing case studies look, so the site and the work match rather than
-advertise each other.
+Serifed typewriter faces do the display work; the same typewriter voice runs body. Numbers do the
+talking and the prose stays out of their way. Confident because it shows its working, never because
+it asserts loudly.
 
 ## Anti-references
 
-- **A digital marketing agency site.** Stock gym photography, *"we grow brands"*, a team grid, a logo
-  carousel, a gradient hero. This is the exact thing that already took their money and posted nothing,
-  and looking like it forfeits the argument before a word is read.
-- **An AI-generated landing page.** Cream or sand body background, a tiny uppercase tracked eyebrow
-  above every section, three identical cards, a big-number hero metric block.
-- **A SaaS product page.** Pricing tiers side by side, feature checkmarks, a *"Trusted by"* strip, a
-  free-trial button. There is one thing at one price.
+- ⛔ **A SaaS three-tier pricing page.** Notion/Vercel/Linear-style cards side by side, feature
+  checkmarks, "Trusted by" strip, a free-trial button. This is the exact aesthetic the buyer's own
+  agency already delivered. **Three tiers arranged as three newspaper columns, not three pricing
+  tiles.**
+- ⛔ **A digital marketing agency site.** Stock gym photography, *"we grow brands"*, gradient hero,
+  team grid, logo carousel. The register the buyer has already been burned by.
+- ⛔ **The AI cream / sand / parchment landing page.** Warm-tinted near-white body background, tiny
+  uppercase tracked eyebrow above every section, three identical cards, big-number hero metric
+  block. Naming a background `--paper` or `--parchment` is itself the tell — impeccable's own
+  reference flags this. The body background is **true off-white at chroma 0**; paper texture comes
+  from **SVG grain overlay**, not colour. Warmth is carried by the typewriter faces and by the one
+  terracotta accent that survives from the previous register.
+- ⛔ **A design portfolio.** The evidence is the thinking. Every case study is analysis; nothing
+  decorative earns a place.
 
 ## Design Principles
 
-**The evidence is the thinking.** This is not a design portfolio and there are no images to art-direct.
-Every case study is an analysis. Nothing decorative earns a place.
+**The two-reader rule is load-bearing.** Every page has to grip a practitioner AND survive being
+forwarded to a boss who's never met Karl. This governs copy tone (no jargon a boss can't parse),
+image choices (none), and the register (evidence-first, no manufactured urgency).
 
-**Show them their own numbers.** Every figure is either computed from the subject's published page or
-carries a source on the face of the page. An invented number never reaches a visitor.
+**The paper metaphor is typographic, not chromatic.** Newspaper feel comes from mastheads, kickers,
+decks, ledes, ruled dividers, columned layouts, and typewriter type. Not from beige backgrounds or
+crumpled-paper illustrations. The body is off-white; grain is added via SVG noise, not tint.
 
-**The missing offer is the villain, never the marketer.** The category has the problem, not the person
-reading. *Gyms find it hard to turn viewers into buyers* — never *you posted and nobody joined.*
+**Show them their own numbers.** Every figure is either computed from the subject's published page
+or carries a source on the page. An invented number never reaches a visitor. *(Rule preserved from
+the previous register.)*
 
-**Proof of the work, not proof of results.** There are zero delivered case studies with a revenue
-outcome and the site must never imply otherwise. What it can show is the work, dated, in full.
+**The missing offer is the villain, never the marketer.** The category has the problem, not the
+person reading. Rule preserved from Views to Members §11.
 
-**Practise what the work preaches.** The rugsbysensei audit told its client to put one tap between an
-interested stranger and a conversation. The site does the same thing, with the same mechanism.
+**Practise what the work preaches.** The rugsbysensei audit told its client to put one tap between
+an interested stranger and a conversation. The site does the same thing — every CTA is one
+WhatsApp tap with a pre-filled message.
+
+**Every screen is a history entry.** Android Back is the primary navigation control. Multi-page
+architecture (not SPA) makes this native.
 
 ## Accessibility & Inclusion
 
-Taken from the commitments already documented in `README.md` §*Interface rules this site holds to*,
-checked against the Web Interface Guidelines. They were written for a budget Android on mobile data and
-they govern the new pages too:
+Preserved from the existing DESIGN.md's interface rules — all still hold on the new pages:
 
-- Every screen is a history entry; Android's Back gesture is the primary navigation control.
-- No autofocus on touch devices — gated on `(hover:hover) and (pointer:fine)`.
-- `touch-action: manipulation`, to kill the 300ms double-tap delay.
-- `:focus-visible` rings and `(hover:hover)` states, so a keyboard and trackpad work as well as a thumb.
-- Light theme only, set with `data-theme="light"` plus `color-scheme` and a matching `theme-color`, so
-  the Android address bar follows the page. The full dark palette stays in `engine.css`.
-- Body text at 4.5:1 minimum against its background; large text at 3:1.
-- Every animation needs a `prefers-reduced-motion` alternative.
-- ⚠️ **No external requests.** Pages are self-contained so they load on poor mobile data and can be
-  opened offline or sent as a file over WhatsApp.
+- Every screen is a history entry; Android Back is primary nav
+- No autofocus on touch — gated on `(hover:hover) and (pointer:fine)`
+- `touch-action: manipulation` to kill the 300ms double-tap delay
+- `:focus-visible` outlines at 2px, offset 2–3px
+- `(hover:hover)` states so laptops get feedback that touch devices don't need
+- Light theme only, `data-theme="light"` + `color-scheme: light` + `theme-color`
+- Body text ≥4.5:1 against its background; large text ≥3:1
+- Every animation needs a `prefers-reduced-motion` alternative
+- **Zero external requests.** Fonts self-hosted, no analytics, no CDN calls, no framework
+
+## ⚠️ Font licence status (Karl's decision, 22 Sep 2026)
+
+Six of seven typewriter fonts on this site are **non-commercial licences**. Karl was surfaced this
+finding and chose to ship anyway, accepting the risk. The one commercially-cleared font is
+**Special Elite** (Apache 2.0). If a licence claim ever arrives, the fallback plan is:
+Special Elite as body/display, Courier Prime (SIL OFL) as screenplay/spec-doc, IBM Plex Mono as
+fallback. Rebuilding the site with the fallback stack is ~1 day of work.
+
+Details: `_engine/fonts/LICENCE_STATUS.md`.

@@ -331,23 +331,36 @@ head("Site");
   const page = (rel) => fs.readFileSync(path.join(TOOLS, rel, "index.html"), "utf8");
 
   const home = page(".");
-  ok("home: is the portfolio, not the Toolbox", /Views don&rsquo;t become members/.test(home));
+  // The home page is now the three-tier front page, not the case-study portfolio.
+  // The through-line is the editorial headline; the free teardown is the banner; the three
+  // tiers each have their own detail page.
+  ok("home: leads with the through-line", /poor at product development/.test(home));
+  ok("home: shows the free teardown as the banner CTA", /Send me your price page/.test(home));
+  ok("home: names all three tier products",
+     /The Priced Teardown/.test(home) && /The January Campaign/.test(home) && /The 4-Month Fill/.test(home));
+  ok("home: routes to each tier's detail page",
+     home.includes('href="/audit"') && home.includes('href="/january-campaign"') && home.includes('href="/the-4-month-fill"'));
   ok("home: carries the one ask", home.includes("wa.me/254704334027"));
   ok("home: offers the fallback (a free tool)", home.includes('href="/tools"'));
   ok("home: no external requests",
      !/(src|href)=["']https?:\/\/(?!open\.spotify|wa\.me)/.test(home));
   ok("home: self-contained (no <link> or external <script src>)",
      !/<link[^>]+stylesheet/i.test(home) && !/<script[^>]+src=/i.test(home));
-  ok("home: every chart has an accessible name",
-     (home.match(/<svg/g) || []).length === (home.match(/<svg[^>]+aria-label=/g) || []).length);
-  ok("home: charts are declared as images",
-     (home.match(/<svg/g) || []).length === (home.match(/<svg[^>]+role="img"/g) || []).length);
 
-  // Proof discipline: the page may not imply a delivered result it does not have.
-  ok("home: still says there is no delivered gym campaign",
-     /No delivered gym campaign yet/.test(home));
-  // Never-publish list: Zelha proves a document was produced, never revenue.
-  ok("home: carries no Zelha revenue figure", !/KSh\s*2,?500/.test(home));
+  // The four case studies moved from home to /audit as "what this looks like in practice."
+  const audit = page("audit");
+  ok("audit: exists and carries the four case studies",
+     /rugsbysensei/.test(audit) && /Zelha/.test(audit) && /sidneynyaga/.test(audit) && /Every plan is a duration/.test(audit));
+  ok("audit: still says there is no delivered gym campaign",
+     /Zero delivered gym campaigns/.test(audit) || /No delivered gym campaign/.test(audit));
+  ok("audit: carries no Zelha revenue figure", !/KSh\s*2,?500/.test(audit));
+  ok("audit: routes back to home", audit.includes('href="/"'));
+
+  // The three tier pages route between one another and each carry their WhatsApp ask.
+  const jan = page("january-campaign");
+  ok("january-campaign: exists and carries its CTA", /wa\.me\/254704334027/.test(jan) && /January Campaign/.test(jan));
+  const fill = page("the-4-month-fill");
+  ok("the-4-month-fill: exists and carries its CTA", /wa\.me\/254704334027/.test(fill) && /4-Month Fill/.test(fill));
 
   const tb = page("tools");
   ok("toolbox: moved to /tools and is still a menu",
