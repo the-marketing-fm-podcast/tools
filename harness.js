@@ -369,7 +369,15 @@ head("Site");
      ["who-stopped-coming","dependency-audit","cost-of-repeating","business-level-test"]
        .every(t => tb.includes('href="/' + t + '"')));
   ok("toolbox: offers a way back to the portfolio", /href="\/"/.test(tb));
-  ok("toolbox: keeps the nothing-saved promise", /Nothing is saved/.test(tb));
+  // The nothing-saved promise now scopes to the four in-house tools; openGym
+  // is external and has its own privacy story, so a blanket promise would be
+  // dishonest. The four-tool version still holds.
+  ok("toolbox: keeps the nothing-saved promise for the four in-house tools",
+     /save nothing and send nothing/.test(tb) || /Nothing is saved/.test(tb));
+  ok("toolbox: labels openGym honestly as external, not built by us",
+     /openGym/.test(tb) && /not built by us/.test(tb));
+  ok("toolbox: openGym link opens safely in a new tab",
+     /opengym\.duarte-santos\.ch[^"]*"\s+target="_blank"\s+rel="noopener noreferrer"/.test(tb));
 }
 
 console.log("\n" + passes + " passed, " + fails + " failed");

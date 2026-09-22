@@ -440,6 +440,85 @@ body.paper::after {
   }
 }
 
+/* ---------------- Yellow hero — the elevator pitch band ----------------
+   Full-width, yellow highlighter background — documentary-newspaper style.
+   In B&W mode the yellow drops to a warm gray so the "black and white"
+   promise holds. */
+
+.hero-yellow {
+  background: var(--hero-bg, #f7d64a);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  padding: clamp(28px, 5vw, 44px) 0;
+  margin: 14px 0 30px;
+  position: relative;
+  z-index: 2;
+}
+.hero-yellow .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 10px;
+  opacity: 0.85;
+}
+.hero-yellow .pitch {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+.hero-yellow .pitch .mark {
+  /* Highlighter inside the highlighter: a second, deeper yellow underline
+     that sits under the bottom half of the word, like a marker stroke on
+     a page that is already yellow. */
+  background: linear-gradient(180deg, transparent 55%, var(--hero-mark, #ffb84a) 55%, var(--hero-mark, #ffb84a) 92%, transparent 92%);
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-yellow .lead {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--ink);
+  margin: 0 0 20px;
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.hero-yellow .lead strong {
+  font-weight: 400;
+  border-bottom: 2px solid var(--ink);
+}
+.hero-yellow .actions {
+  margin-top: 12px;
+}
+/* Black-ink CTAs, tuned to read on yellow. */
+.cta-ink {
+  background: var(--ink);
+  color: var(--hero-bg, #f7d64a);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink:hover { background: #000; color: #fff; border-color: #000; }
+}
+.cta-ink-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink-ghost:hover { background: var(--ink); color: var(--hero-bg, #f7d64a); }
+}
+
+/* Colourway overrides for the hero: yellow in colour mode, warm gray in B&W. */
+:root[data-theme="paper"] { --hero-bg: #f7d64a; --hero-mark: #ffb84a; }
+:root[data-theme="paper-bw"] { --hero-bg: #e6e2d8; --hero-mark: #cfc9bd; }
+
 /* ---------------- Banner (free teardown) ---------------- */
 
 .banner {
@@ -839,8 +918,9 @@ body.paper::after {
 
   <main class="card">
     <h1>Find out where your business actually stands</h1>
-    <p class="lede">Four tools. Each one takes under five minutes, needs nothing you have to look up,
-      and gives you one number, or one gap, in your own business.</p>
+    <p class="lede">Four diagnostic tools, plus one open-source workout tracker. Each one takes
+      under five minutes to try, needs nothing you have to look up, and gives you one number, one
+      gap, or one artefact you can hand a member the same day.</p>
 
     <!-- "Who stopped coming?" leads because it is the one tool whose result is money
          the owner can collect this week, from members he already has — and because
@@ -877,7 +957,24 @@ body.paper::after {
       <div class="tg">Start the test &rarr;</div>
     </a>
 
-    <p class="meta">Nothing is saved. Nothing is sent. No email address, no sign-up.</p>
+    <!-- openGym — not a Marketing FM build, so it is honestly labelled as external.
+         It appears here because it earns a place: it exports a printed programme
+         from any routine, and a printed programme is what the audit and the
+         4-month fill both point at when the question is what an annual member
+         gets that a monthly one doesn't. -->
+    <a class="tool" href="https://opengym.duarte-santos.ch" target="_blank" rel="noopener noreferrer">
+      <div class="tn">openGym <em>external &middot; AGPL-3.0 &middot; not built by us</em></div>
+      <div class="td">A free open-source workout tracker. The one feature that matters for a gym:
+        every routine exports as a clean printed PDF. That is what turns "your annual member gets a
+        programme" from a promise into something you can hand across the front desk.</div>
+      <div class="tg">Open openGym &rarr;</div>
+    </a>
+    <p class="meta" style="margin-top:-10px">Configured, branded instances are the paid add-on inside
+      <a href="/the-4-month-fill" style="color:var(--brand);font-weight:600;text-decoration:none">The 4-Month Fill</a>
+      — but the tool itself is free to open right now.</p>
+
+    <p class="meta">The four tools above save nothing and send nothing. openGym is a third-party site
+      with its own privacy story — read theirs before signing in.</p>
     <p class="meta" style="margin-top:10px"><a href="/" style="color:var(--brand);font-weight:600;text-decoration:none">&larr; What Marketing FM does for gyms</a></p>
   </main>
 

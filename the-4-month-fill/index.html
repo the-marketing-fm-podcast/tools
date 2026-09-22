@@ -440,6 +440,85 @@ body.paper::after {
   }
 }
 
+/* ---------------- Yellow hero — the elevator pitch band ----------------
+   Full-width, yellow highlighter background — documentary-newspaper style.
+   In B&W mode the yellow drops to a warm gray so the "black and white"
+   promise holds. */
+
+.hero-yellow {
+  background: var(--hero-bg, #f7d64a);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  padding: clamp(28px, 5vw, 44px) 0;
+  margin: 14px 0 30px;
+  position: relative;
+  z-index: 2;
+}
+.hero-yellow .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 10px;
+  opacity: 0.85;
+}
+.hero-yellow .pitch {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+.hero-yellow .pitch .mark {
+  /* Highlighter inside the highlighter: a second, deeper yellow underline
+     that sits under the bottom half of the word, like a marker stroke on
+     a page that is already yellow. */
+  background: linear-gradient(180deg, transparent 55%, var(--hero-mark, #ffb84a) 55%, var(--hero-mark, #ffb84a) 92%, transparent 92%);
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-yellow .lead {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--ink);
+  margin: 0 0 20px;
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.hero-yellow .lead strong {
+  font-weight: 400;
+  border-bottom: 2px solid var(--ink);
+}
+.hero-yellow .actions {
+  margin-top: 12px;
+}
+/* Black-ink CTAs, tuned to read on yellow. */
+.cta-ink {
+  background: var(--ink);
+  color: var(--hero-bg, #f7d64a);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink:hover { background: #000; color: #fff; border-color: #000; }
+}
+.cta-ink-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink-ghost:hover { background: var(--ink); color: var(--hero-bg, #f7d64a); }
+}
+
+/* Colourway overrides for the hero: yellow in colour mode, warm gray in B&W. */
+:root[data-theme="paper"] { --hero-bg: #f7d64a; --hero-mark: #ffb84a; }
+:root[data-theme="paper-bw"] { --hero-bg: #e6e2d8; --hero-mark: #cfc9bd; }
+
 /* ---------------- Banner (free teardown) ---------------- */
 
 .banner {
@@ -900,8 +979,11 @@ YOU PROVIDE:
   <h2>The exit at month 4</h2>
   <p>A documented playbook you own — the pillars, the calendar cadence, the shoot workflow, the ad-set structure, the reporting template, the desk-script library, and one worked month of examples. Written so somebody else can run it. Plus one of two exit routes: a hiring spec for the SMM you hire next (I help screen the first three candidates if asked), or evidence the system runs without a full-time hire.</p>
 
-  <h2>Optional add-on to the handover</h2>
-  <p>A configured openGym instance — the open-source workout tracker, branded and populated for your members, with printed twelve-week programme series generated from it as PDFs. Priced separately from the engagement fee. The AGPL licence terms and the sign-off live in the contract.</p>
+  <h2>Optional add-on to the handover — openGym, configured for your gym</h2>
+  <p><a href="https://opengym.duarte-santos.ch" target="_blank" rel="noopener noreferrer">openGym</a> is a free open-source workout tracker. On its own it does nothing for your business — it is a tool for members, not for you. What it can do that matters is <strong>export any routine as a clean printed PDF</strong>. That is the mechanism your annual member gets a printed twelve-week programme they carry with them — and it is what the audit points at when the question is what an annual plan can offer that isn't a discount.</p>
+  <p>The add-on is Karl configuring a branded instance for your members, populating it with the class schedule and the programmes your trainers actually run, and delivering a PDF series generated from it. Priced separately from the engagement fee.</p>
+  <p><strong>The AGPL note.</strong> openGym is licensed under AGPL-3.0. Any modifications Karl makes to the source are published as the licence requires; your private data — member records, workout logs — is not source and is not affected. The full sign-off lives in the contract.</p>
+  <p>You can open <a href="/tools">openGym</a> yourself, free, from the free tools page. This add-on is what Karl does with it.</p>
 
   <h2>Filter</h2>
   <p>I take one client at a time. Ideally gyms with a live website, more than one location or a parent brand, prices published on the page, and somebody whose job it is to run marketing. The first fit sits below every other filter: you can decide.</p>
