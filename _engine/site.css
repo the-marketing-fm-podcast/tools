@@ -221,6 +221,85 @@ body.paper::after {
   }
 }
 
+/* ---------------- Yellow hero — the elevator pitch band ----------------
+   Full-width, yellow highlighter background — documentary-newspaper style.
+   In B&W mode the yellow drops to a warm gray so the "black and white"
+   promise holds. */
+
+.hero-yellow {
+  background: var(--hero-bg, #f7d64a);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  padding: clamp(28px, 5vw, 44px) 0;
+  margin: 14px 0 30px;
+  position: relative;
+  z-index: 2;
+}
+.hero-yellow .kicker {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 10px;
+  opacity: 0.85;
+}
+.hero-yellow .pitch {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+.hero-yellow .pitch .mark {
+  /* Highlighter inside the highlighter: a second, deeper yellow underline
+     that sits under the bottom half of the word, like a marker stroke on
+     a page that is already yellow. */
+  background: linear-gradient(180deg, transparent 55%, var(--hero-mark, #ffb84a) 55%, var(--hero-mark, #ffb84a) 92%, transparent 92%);
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-yellow .lead {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--ink);
+  margin: 0 0 20px;
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.hero-yellow .lead strong {
+  font-weight: 400;
+  border-bottom: 2px solid var(--ink);
+}
+.hero-yellow .actions {
+  margin-top: 12px;
+}
+/* Black-ink CTAs, tuned to read on yellow. */
+.cta-ink {
+  background: var(--ink);
+  color: var(--hero-bg, #f7d64a);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink:hover { background: #000; color: #fff; border-color: #000; }
+}
+.cta-ink-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .cta-ink-ghost:hover { background: var(--ink); color: var(--hero-bg, #f7d64a); }
+}
+
+/* Colourway overrides for the hero: yellow in colour mode, warm gray in B&W. */
+:root[data-theme="paper"] { --hero-bg: #f7d64a; --hero-mark: #ffb84a; }
+:root[data-theme="paper-bw"] { --hero-bg: #e6e2d8; --hero-mark: #cfc9bd; }
+
 /* ---------------- Banner (free teardown) ---------------- */
 
 .banner {
